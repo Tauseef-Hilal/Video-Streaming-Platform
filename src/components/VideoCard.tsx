@@ -3,12 +3,7 @@
 import { useState } from "react";
 import { FiMoreVertical } from "react-icons/fi";
 
-type Video = {
-  title: string;
-  creator: string;
-  viewCount: string;
-  uploadDate: string;
-};
+import { Video } from "@/lib/types";
 
 interface VideoCardProp {
   video: Video;
@@ -28,9 +23,9 @@ const VideoCard: React.FC<VideoCardProp> = ({ video }) => {
       <div className="bg-gray-800 opacity-80 h-full rounded-xl"></div>
       <div className="flex justify-between items-start">
         <div className="flex gap-4">
-          <div className=" bg-gray-800 w-[40px] h-[40px] rounded-full"></div>
+          <div className="bg-gray-800 w-[40px] h-[40px] rounded-full"></div>
           <div className="text-sm">
-            <h2 className=" text-base font-medium">{video.title}</h2>
+            <h2 className="text-base font-medium">{video.title}</h2>
             <p className="text-neutral-400">{video.creator}</p>
             <p className="text-neutral-400">
               {video.viewCount} views • {video.uploadDate}
