@@ -2,8 +2,8 @@ const Sidebar: React.FC = () => {
   return (
     <aside
       className={`
-      bg-gray-800 h-full w-[200px] 
-      hidden md:flex justify-center items-center
+        h-full w-[264px] hidden md:flex 
+        justify-center items-center
       `}
     >
       SIDEBAR
