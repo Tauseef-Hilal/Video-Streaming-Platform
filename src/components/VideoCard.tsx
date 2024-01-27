@@ -15,7 +15,7 @@ const VideoCard: React.FC<VideoCardProp> = ({ video }) => {
   return (
     <div
       className={`
-        h-[320px] max-w-[460px] md:h-min aspect-video flex flex-col gap-2
+        aspect-video flex flex-col gap-2
       `}
       onMouseOver={() => setShowMoreBtn(true)}
       onMouseLeave={() => setShowMoreBtn(false)}
