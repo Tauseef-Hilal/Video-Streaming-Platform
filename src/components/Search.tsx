@@ -1,6 +1,6 @@
 "use client";
 
-import { ChangeEventHandler, useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import { BiSearch } from "react-icons/bi";
 import { RxCross1 } from "react-icons/rx";
 
@@ -32,7 +32,7 @@ const Search: React.FC<SearchProps> = ({
   }, [focused, inputRef]);
 
   return (
-    <div className={`flex relative w-full ${className}`}>
+    <div className={`flex w-full ${className}`}>
       {!focused && <BiSearch className="ml-4 text-transparent text-xl" />}
       <div
         className={`
@@ -41,7 +41,11 @@ const Search: React.FC<SearchProps> = ({
       `}
       >
         {focused && (
-          <BiSearch className="absolute -z-10 ml-4 text-neutral-300 text-xl" />
+          <BiSearch
+            className={`
+              absolute -z-10 left-4 text-neutral-300 text-xl
+            `}
+          />
         )}
         <input
           ref={inputRef}
@@ -52,22 +56,20 @@ const Search: React.FC<SearchProps> = ({
           onBlur={onBlur}
           onChange={(e) => onChange(e.target.value)}
           className={`
-            pl-4 placeholder-neutral-500 text-neutral-300 bg-[#1d1c1c2d]
-            font-light outline-none ${focused ? "pl-12" : ""}
+            pl-4 placeholder-neutral-500 text-neutral-300 bg-transparent
+            font-light outline-none w-full ${focused ? "pl-[48px] pr-9" : ""}
           `}
         />
-        {value.length > 0 ? (
-          <IconButton
-            onClick={() => {
-              inputRef.current?.focus();
-              onChange("");
-            }}
-            icon={RxCross1}
-            size={20}
-          />
-        ) : (
-          <IconButton className="opacity-0" icon={RxCross1} size={20} />
-        )}
+        <IconButton
+          className={`
+            absolute top-1/2 -translate-y-1/2 right-0 
+            ${value.length <= 0 ? "opacity-0 -z-10" : ""}
+          `}
+          onClick={() => onChange("")}
+          onMouseDown={(e) => e.preventDefault()}
+          icon={RxCross1}
+          size={20}
+        />
       </div>
       <IconButton
         className={`

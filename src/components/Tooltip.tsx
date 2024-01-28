@@ -21,8 +21,8 @@ const Tooltip: React.FC<TooltipProps> = ({ tip, children, className }) => {
       {showTip && (
         <div
           className={`
-            absolute top-full left-1/2 -translate-x-1/2 
-            bg-[#3b3a3ab0] text-neutral-200 text-xs rounded-md
+            absolute z-10 top-full left-1/2 -translate-x-1/2 
+            bg-[#3b3a3ab1] text-neutral-200 text-xs rounded-md
             mt-1 ${tip != "" ? "p-2" : ""}
             ${className}
           `}
