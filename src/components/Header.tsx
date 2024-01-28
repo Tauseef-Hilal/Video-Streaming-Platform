@@ -15,14 +15,18 @@ const Header: React.FC = () => {
   const [viewportWidth, setViewportWidth] = useState(0);
   const [showWideSearchBar, setShowWideSearchBar] = useState(false);
 
+  // Used to decide which search bar to display
+  const SEARCH_BREAKPOINT = 768;
+
   useEffect(() => {
     function resizeHandler() {
-      // Performance optimisation: Only update viewportWidth if it lies on the 
-      // opposite side of window.innerWidth, about 768
-      console.log(viewportWidth, window.innerWidth)
+      // Performance optimisation: Only update viewportWidth if
+      // window.innerWidth and viewportWidth both are not < or >= BREAKPOINT
       if (
-        (window.innerWidth < 768 && viewportWidth < 768) ||
-        (window.innerWidth >= 768 && viewportWidth >= 768)
+        (window.innerWidth < SEARCH_BREAKPOINT &&
+          viewportWidth < SEARCH_BREAKPOINT) ||
+        (window.innerWidth >= SEARCH_BREAKPOINT &&
+          viewportWidth >= SEARCH_BREAKPOINT)
       ) {
         return;
       }
@@ -59,7 +63,7 @@ const Header: React.FC = () => {
 
   return (
     <header>
-      {showWideSearchBar && viewportWidth < 768 ? (
+      {showWideSearchBar && viewportWidth < SEARCH_BREAKPOINT ? (
         <div className="flex justify-between items-center pl-2 pr-4 py-2">
           <IconButton
             onClick={toggleShowWideSearchBar}
