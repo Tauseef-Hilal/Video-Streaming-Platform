@@ -17,12 +17,25 @@ const Header: React.FC = () => {
 
   useEffect(() => {
     function resizeHandler() {
+      // Performance optimisation: Only update viewportWidth if it lies on the 
+      // opposite side of window.innerWidth, about 768
+      console.log(viewportWidth, window.innerWidth)
+      if (
+        (window.innerWidth < 768 && viewportWidth < 768) ||
+        (window.innerWidth >= 768 && viewportWidth >= 768)
+      ) {
+        return;
+      }
+
       setViewportWidth(window.innerWidth);
     }
 
+    // Update viewportWidth because its initially set to 0
+    setViewportWidth(window.innerWidth);
+
     window.addEventListener("resize", resizeHandler);
     return () => window.removeEventListener("resize", resizeHandler);
-  }, []);
+  }, [viewportWidth]);
 
   const handleSearchInputChange = (value: string) => {
     setSearchValue(value);
