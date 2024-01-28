@@ -55,14 +55,18 @@ const Header: React.FC = () => {
             tip="Back"
           />
           <Search
-            className="px-14"
             value={searchValue}
             focused={searchFocussed}
             onChange={handleSearchInputChange}
             onFocus={handleSearchInputFocus}
             onBlur={handleSearchInputBlur}
           />
-          <IconButton icon={BiMicrophone} size={24} tip="Voice" />
+          <IconButton
+            className="sm:block"
+            icon={BiMicrophone}
+            size={24}
+            tip="Voice"
+          />
         </div>
       ) : (
         <div className={`flex justify-between items-center pl-2 pr-4 py-2`}>
