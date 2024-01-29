@@ -14,3 +14,14 @@ body {
   background-color: var(--background-color);
   color: var(--text-color);
 }
+
+/* App Drawer */
+.drawer-open {
+  transition: transform 0.3s cubic-bezier(0.075, 0.82, 0.165, 1);
+  transform: translateX(0);
+}
+
+.drawer-closed {
+  transition: transform 0.3s cubic-bezier(0.075, 0.82, 0.165, 1);
+  transform: translateX(-100%);
+}
