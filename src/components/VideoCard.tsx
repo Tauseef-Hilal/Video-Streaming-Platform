@@ -20,7 +20,7 @@ const VideoCard: React.FC<VideoCardProp> = ({ video }) => {
       onMouseOver={() => setShowMoreBtn(true)}
       onMouseLeave={() => setShowMoreBtn(false)}
     >
-      <div className="bg-gray-800 opacity-80 h-full rounded-xl"></div>
+      <div className="bg-[#1d1e21] h-full rounded-xl"></div>
       <div className="flex justify-between items-start">
         <div className="flex gap-4">
           <div className="bg-gray-800 w-[40px] h-[40px] rounded-full"></div>
