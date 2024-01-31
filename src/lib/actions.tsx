@@ -96,7 +96,11 @@ export async function fetchThumbnailsByChannelIds(channelIds: string[]) {
   const thumbnails: { [id: string]: ThumbnailGroup } = {};
 
   data.items.forEach((channelData: any) => {
-    thumbnails[channelData.id] = channelData.snippet.thumbnails;
+    thumbnails[channelData.id] = {
+      low: channelData.snippet.thumbnails.default,
+      medium: channelData.snippet.thumbnails.medium,
+      high: channelData.snippet.thumbnails.high,
+    };
   });
 
   return thumbnails;
