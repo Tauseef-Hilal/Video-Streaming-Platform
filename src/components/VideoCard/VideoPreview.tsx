@@ -17,12 +17,12 @@ const VideoPreview: React.FC<VideoPreviewProps> = ({
   const thumbnail = thumbnails.high ?? thumbnails.medium ?? thumbnails.low;
 
   return (
-    <div className="relative flex justify-center flex-col overflow-clip">
+    <div className="relative flex justify-center flex-col">
       <Image
         src={thumbnail.url}
         width={thumbnail.width}
         height={thumbnail.height}
-        className="rounded-xl w-fullaspect-video"
+        className="rounded-xl w-full object-cover aspect-video"
         alt="Video Thumbnail"
       />
       {durationStr ? (
