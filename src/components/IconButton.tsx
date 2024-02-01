@@ -25,9 +25,9 @@ const IconButton: React.FC<IconButtonProps> = ({
         onMouseDown={onMouseDown}
         onClick={onClick}
         className={`
-        p-2 rounded-full hover:bg-neutral-800 flex justify-center items-center 
-        cursor-pointer ${className}
-      `}
+          p-2 rounded-full hover:bg-neutral-800 flex justify-center 
+          items-center cursor-pointer ${className}
+        `}
       >
         <Icon size={size} />
       </span>

@@ -59,7 +59,7 @@ const Header: React.FC = () => {
       <header
         className={`
           fixed flex justify-between items-center h-[56px] w-full bg-inherit 
-          -left-4 pl-8 px-4 z-10 ${searchCoversHeader ? "z-20 py-2" : ""}
+          px-6 z-10 ${searchCoversHeader ? "z-20 py-2" : ""}
         `}
       >
         {searchCoversHeader ? (
@@ -86,7 +86,7 @@ const Header: React.FC = () => {
           </>
         ) : (
           <>
-            <Logo className="ml-12" />
+            <Logo className="ml-10" />
 
             {/* Search Bar & Mic (md and above) */}
             <div
@@ -129,7 +129,7 @@ const Header: React.FC = () => {
               </div>
               <div className="flex items-center">
                 <IconButton
-                  className="hover:bg-transparent p-0"
+                  className="hover:bg-transparent px-0 py-0"
                   icon={FiMoreVertical}
                   size={24}
                   tip="Settings"

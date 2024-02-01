@@ -18,18 +18,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={roboto.className + " overflow-hidden w-full"}>
+      <body className={roboto.className}>
         <Header />
         <div className="flex h-full">
           <Sidebar className="pt-2" />
-          <main
-            className={`
-              pt-[68px] p-4 h-full w-full overflow-y-scroll overflow-x-hidden 
-              scroll-smooth 
-            `}
-          >
-            {children}
-          </main>
+          <main className="h-full w-full pt-[68px] p-4">{children}</main>
         </div>
       </body>
     </html>

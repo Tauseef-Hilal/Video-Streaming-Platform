@@ -13,19 +13,29 @@ export function getFormattedDifference(timestamp: string) {
   // Calculate diff in milliseconds
   const date = new Date(timestamp);
   const currentDate = new Date();
+
   let diff = currentDate.getTime() - date.getTime();
 
-  // Convert to "<diff> <suffix (+s)>" format
-  const suffixes = ["second", "minute", "hour", "day", "month", "year"];
-  const divisors = [1000, 60, 60, 24, 30, 12];
+  // Formula to convert from prev unit to curr
+  // T(curr) = T(prev) / F(curr)
+  const conversionMap = {
+    second: 1000,
+    minute: 60,
+    hour: 60,
+    day: 24,
+    week: 7,
+    month: 4,
+    year: 12,
+  };
 
-  let divisorIdx = 0;
-  for (; divisorIdx < divisors.length; divisorIdx++) {
-    if (diff < divisors[divisorIdx]) break;
-    diff = Math.floor(diff / divisors[divisorIdx]);
+  let unit, factor, suffix;
+  for ([unit, factor] of Object.entries(conversionMap)) {
+    if (diff < factor) break;
+    diff = Math.floor(diff / factor);
+    suffix = unit;
   }
 
-  return `${diff} ${suffixes[divisorIdx - 1]}${diff > 1 ? "s" : ""}`;
+  return `${diff} ${suffix}${diff > 1 ? "s" : ""}`;
 }
 
 export function getFormattedViewCount(viewCountString: string): string {

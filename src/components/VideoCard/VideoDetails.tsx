@@ -17,10 +17,11 @@ const VideoDetails: React.FC<VideoDetailsProps> = ({
 }) => {
   const timeSinceUpload = getFormattedDifference(videoSnippet.publishedAt);
   const viewCount = getFormattedViewCount(videoStats.viewCount);
-  const channelThumbnail =
-    videoSnippet.channelThumbnail.low ??
+  const channelThumbnail = videoSnippet.channelThumbnail.low ??
     videoSnippet.channelThumbnail.medium ??
-    videoSnippet.channelThumbnail.high;
+    videoSnippet.channelThumbnail.high ?? {
+      url: "https://gravatar.com/avatar?d=mp",
+    };
 
   return (
     <div className="flex justify-between items-start">
@@ -28,7 +29,7 @@ const VideoDetails: React.FC<VideoDetailsProps> = ({
         <Image
           src={channelThumbnail.url}
           alt="Channel Thumbnail"
-          className="rounded-full"
+          className="rounded-full flex-shrink-0"
           width={40}
           height={40}
         />

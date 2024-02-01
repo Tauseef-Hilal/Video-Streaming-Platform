@@ -12,9 +12,7 @@ interface FullSidebarProps {
 const FullSidebar: React.FC<FullSidebarProps> = ({ links, className }) => {
   return (
     <div
-      className={`
-        flex flex-col w-[230px] overflow-y-auto ${className}
-      `}
+      className={`flex flex-col w-[230px] ${className}`}
     >
       <div>
         {links.map((linkArr, idx) => (

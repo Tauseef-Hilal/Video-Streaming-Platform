@@ -10,7 +10,7 @@ import { fetchVideosFromYoutube } from "@/lib/actions";
 
 type HomePageState = "LOADING" | "SUCCESS" | "ERROR";
 
-export default function Home() {
+export default function HomePage() {
   const [state, setState] = useState<HomePageState>("LOADING");
   const [videos, setVideos] = useState<Video[]>([]);
 
