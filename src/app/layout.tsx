@@ -20,9 +20,9 @@ export default function RootLayout({
     <html lang="en">
       <body className={roboto.className}>
         <Header />
-        <div className="flex h-full">
+        <div className="flex min-h-full">
           <Sidebar className="pt-2" />
-          <main className="h-full w-full pt-[68px] p-4">{children}</main>
+          <main className="min-h-full w-full pt-[68px] p-4">{children}</main>
         </div>
       </body>
     </html>

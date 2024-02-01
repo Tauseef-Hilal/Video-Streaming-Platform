@@ -33,7 +33,7 @@ export default function HomePage() {
 
   switch (state) {
     case "LOADING":
-      return <LoadingIndicator />;
+      return <LoadingIndicator className="h-full" />;
     case "ERROR":
       return (
         <ErrorComponent

@@ -7,7 +7,7 @@ interface ErrorProps {
 
 const ErrorComponent: React.FC<ErrorProps> = ({ text, onRetryClick }) => {
   return (
-    <div className="h-full flex justify-center items-center">
+    <div className="h-screen flex justify-center items-center">
       <div className="flex flex-col items-center gap-2">
         <PiSmileySadFill className="text-red-600 animate-bounce" size={70} />
         <p className="text-neutral-500">{text}</p>
