@@ -17,11 +17,10 @@ const VideoDetails: React.FC<VideoDetailsProps> = ({
 }) => {
   const timeSinceUpload = getFormattedDifference(videoSnippet.publishedAt);
   const viewCount = getFormattedViewCount(videoStats.viewCount);
-  const channelThumbnail = videoSnippet.channelThumbnail.low ??
+  const channelThumbnail =
+    videoSnippet.channelThumbnail.low ??
     videoSnippet.channelThumbnail.medium ??
-    videoSnippet.channelThumbnail.high ?? {
-      url: "https://gravatar.com/avatar?d=mp",
-    };
+    videoSnippet.channelThumbnail.high;
 
   return (
     <div className="flex justify-between items-start">

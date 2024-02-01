@@ -73,7 +73,15 @@ async function fetchYoutubeVideosByIds(videoIds: string[]) {
     await fetchThumbnailsByChannelIds(channelIds);
 
   for (const video of videos) {
-    video.snippet.channelThumbnail = channelThumbnails[video.snippet.channelId];
+    video.snippet.channelThumbnail = channelThumbnails[
+      video.snippet.channelId
+    ] ?? {
+      low: {
+        url: "https://gravatar.com/avatar?d=mp",
+        width: 40,
+        height: 40,
+      },
+    };
   }
 
   return videos;
