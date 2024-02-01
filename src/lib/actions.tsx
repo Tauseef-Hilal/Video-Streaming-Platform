@@ -7,16 +7,16 @@ const API_KEY = process.env.YOUTUBE_API_KEY;
 const BASE_URL = process.env.YOUTUBE_API_BASE_URL;
 
 export async function fetchVideosFromYoutube() {
-  const API_URL =
-    `${BASE_URL}/search?key=${API_KEY}` + `&part=id` + `&maxResults=50`;
-
+  const API_URL = `${BASE_URL}/search?key=${API_KEY}&part=id&maxResults=50`;
   const res = await fetch(API_URL);
+
   if (res.status != 200) {
     throw "Error!";
   }
 
   const data = await res.json();
   const videoIds: string[] = [];
+
   for (const video of data.items) {
     videoIds.push(video.id.videoId);
   }

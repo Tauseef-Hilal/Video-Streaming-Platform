@@ -1,11 +1,16 @@
+import Link from "next/link";
 import { FaCirclePlay } from "react-icons/fa6";
 
-const Logo: React.FC = () => {
+interface LogoProps {
+  className?: string;
+}
+
+const Logo: React.FC<LogoProps> = ({ className }) => {
   return (
-    <div className="flex items-center gap-1">
+    <Link href={"/"} className={`flex items-center gap-1 ${className}`}>
       <FaCirclePlay className="text-2xl text-red-500" />
       <span className="text-xl font-bold">FusionFlix</span>
-    </div>
+    </Link>
   );
 };
 

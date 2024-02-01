@@ -18,7 +18,8 @@ const AppDrawer: React.FC<AppDrawerProps> = ({ visible, onClose }) => {
         <div
           onClick={onClose}
           className={`
-            fixed top-0 w-full h-full bg-black opacity-30 transition-opacity
+            fixed z-10 top-0 w-full h-full bg-black opacity-40 
+            transition-opacity
           `}
         />
       )}
@@ -34,7 +35,7 @@ const AppDrawer: React.FC<AppDrawerProps> = ({ visible, onClose }) => {
             flex flex-col bg-[var(--background-color)] overflow-auto h-full
           `}
         >
-          <div className="flex items-center gap-4 pl-3 pt-2">
+          <div className="flex items-center gap-3 pl-3 pt-2">
             <IconButton onClick={onClose} icon={CgMenu} size={24} />
             <Logo />
           </div>

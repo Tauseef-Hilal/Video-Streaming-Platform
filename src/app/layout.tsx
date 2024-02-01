@@ -19,12 +19,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={roboto.className + " overflow-hidden w-full"}>
-        <Header
-          className={`
-            fixed top-0 -left-4 h-[56px] w-full bg-inherit pl-6 pr-4 py-2 
-            sm:pl-8 z-10
-          `}
-        />
+        <Header />
         <div className="flex h-full">
           <Sidebar className="pt-2" />
           <main

@@ -32,7 +32,7 @@ const Search: React.FC<SearchProps> = ({
   }, [focused, inputRef]);
 
   return (
-    <div className={`flex w-full ${className}`}>
+    <div className={`flex h-full w-full ${className}`}>
       {!focused && <BiSearch className="ml-4 text-transparent text-xl" />}
       <div
         className={`
@@ -74,7 +74,7 @@ const Search: React.FC<SearchProps> = ({
       <IconButton
         className={`
           bg-neutral-800 hover:bg-neutral-800 rounded-full rounded-l-none 
-          border border-l-0 border-neutral-700 px-4
+          border border-l-0 border-neutral-700 px-4 h-full
         `}
         icon={BiSearch}
         size={20}
