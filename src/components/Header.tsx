@@ -6,13 +6,14 @@ import { BiArrowBack, BiMicrophone, BiSearch } from "react-icons/bi";
 import Logo from "./Logo";
 import Search from "./Search";
 import IconButton from "./IconButton";
+import SignInButton from "./SignInButton";
 import { useViewportWidth } from "@/hooks/viewport";
 import { areOnSameSideOfReference } from "@/lib/utils";
 import { FiMoreVertical } from "react-icons/fi";
-import SignInButton from "./SignInButton";
+import { SCROLLBAR_WIDTH } from "@/lib/constants";
 
 // Used to decide whether search bar covers whole header
-const SEARCH_BREAKPOINT = 768;
+const SEARCH_BREAKPOINT = 768 + SCROLLBAR_WIDTH;
 
 const Header: React.FC = () => {
   const [searchValue, setSearchValue] = useState("");
@@ -26,6 +27,7 @@ const Header: React.FC = () => {
       viewportWidth,
       SEARCH_BREAKPOINT
     );
+    return true;
   });
 
   // Whether Search covers whole header
@@ -45,6 +47,7 @@ const Header: React.FC = () => {
   const handleSearchInputBlur = () => {
     setSearchFocussed(false);
     setShowWideSearchBar(false);
+    console.log("BKJ:SLDKJ:LSKDBJ");
   };
 
   const toggleShowWideSearchBar = () => {
@@ -57,6 +60,7 @@ const Header: React.FC = () => {
       {/* `z-20` so that the header renders over sidebar, making back button
           visible on top of menu button when search covers whole header */}
       <header
+        id="header"
         className={`
           fixed flex justify-between items-center h-[56px] w-full bg-inherit 
           px-6 z-10 ${searchCoversHeader ? "z-20 py-2" : ""}
@@ -71,18 +75,19 @@ const Header: React.FC = () => {
               tip="Back"
             />
             <Search
+              key={"123"}
               value={searchValue}
               focused={searchFocussed}
               onChange={handleSearchInputChange}
               onFocus={handleSearchInputFocus}
               onBlur={handleSearchInputBlur}
-            />
+              />
             <IconButton
               className="sm:block"
               icon={BiMicrophone}
               size={24}
               tip="Voice"
-            />
+              />
           </>
         ) : (
           <>
@@ -94,8 +99,9 @@ const Header: React.FC = () => {
                 hidden flex-auto md:flex items-center gap-2 md:max-w-[424px] 
                 lg:max-w-[600px] h-min
               `}
-            >
+              >
               <Search
+                key={"123"}
                 value={searchValue}
                 focused={searchFocussed}
                 onChange={handleSearchInputChange}

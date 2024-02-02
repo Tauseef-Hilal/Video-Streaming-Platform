@@ -29,7 +29,7 @@ const Search: React.FC<SearchProps> = ({
     if (focused) {
       inputRef.current?.focus();
     }
-  }, [focused, inputRef]);
+  }, [focused]);
 
   return (
     <div className={`flex h-full w-full ${className}`}>

@@ -3,16 +3,29 @@
 import { SidebarLink } from "./data";
 import SidebarSection from "./SidebarSection";
 import AdditionalLinks from "./AdditionalLinks";
+import { disableBodyScroll, resetBodyScroll } from "@/lib/utils";
 
 interface FullSidebarProps {
   links: (SidebarLink[] | null)[];
+  resetScrollOnLeave?: boolean;
   className?: string;
 }
 
-const FullSidebar: React.FC<FullSidebarProps> = ({ links, className }) => {
+const FullSidebar: React.FC<FullSidebarProps> = ({
+  links,
+  className,
+  resetScrollOnLeave = true,
+}) => {
   return (
     <div
-      className={`flex flex-col w-[230px] ${className}`}
+      onMouseEnter={() => {
+        disableBodyScroll();
+      }}
+      onMouseLeave={() => {
+        if (!resetScrollOnLeave) return;
+        resetBodyScroll();
+      }}
+      className={`flex flex-col w-[230px] overflow-y-auto ${className}`}
     >
       <div>
         {links.map((linkArr, idx) => (

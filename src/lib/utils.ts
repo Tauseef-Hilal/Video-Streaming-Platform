@@ -1,3 +1,5 @@
+import { SCROLLBAR_BG, SCROLLBAR_WIDTH } from "./constants";
+
 export function areOnSameSideOfReference(
   value1: number,
   value2: number,
@@ -5,7 +7,8 @@ export function areOnSameSideOfReference(
 ) {
   return (
     (value1 < referencePoint && value2 < referencePoint) ||
-    (value1 >= referencePoint && value2 >= referencePoint)
+    (value1 > referencePoint && value2 > referencePoint) ||
+    (value1 === referencePoint && value2 === referencePoint)
   );
 }
 
@@ -69,4 +72,18 @@ export function getFormattedDuration(duration: string): string {
     .join(":");
 
   return `${formattedTime.length == 2 ? "0:" : ""}${formattedTime}`;
+}
+
+export function resetBodyScroll() {
+  document.body.style.overflow = "unset";
+  document.body.style.borderRight = "unset";
+  document.getElementsByTagName("header")[0].style.borderRight = "unset";
+}
+
+export function disableBodyScroll() {
+  document.body.style.overflow = "hidden";
+  document.body.style.borderRight =
+    `${SCROLLBAR_WIDTH}px solid ` + `${SCROLLBAR_BG}`;
+  document.getElementById("header")!.style.borderRight =
+    `${SCROLLBAR_WIDTH}px solid ` + `${SCROLLBAR_BG}`;
 }

@@ -9,7 +9,7 @@ import IconButton from "../IconButton";
 import MiniSidebar from "./MiniSidebar";
 import FullSidebar from "./FullSidebar";
 import { useViewportWidth } from "@/hooks/viewport";
-import { areOnSameSideOfReference } from "@/lib/utils";
+import { areOnSameSideOfReference, disableBodyScroll } from "@/lib/utils";
 
 // Used for switching between sidebars on large screens (vw >= BREAKPOINT)
 const BREAKPOINT = 1280;
@@ -19,7 +19,7 @@ const sidebars = [
     className="pt-[6px]"
     links={[...sidebarLinks[0]!, ...sidebarLinks[1]!]}
   />,
-  <FullSidebar key={1} links={sidebarLinks} />,
+  <FullSidebar key={1} links={sidebarLinks} className="" />,
 ];
 
 interface SidebarProps {
@@ -46,6 +46,7 @@ const Sidebar: React.FC<SidebarProps> = ({ className }) => {
 
     // AppDrawer for smaller screens
     setShowAppDrawer(true);
+    disableBodyScroll();
   };
 
   return (
@@ -61,7 +62,7 @@ const Sidebar: React.FC<SidebarProps> = ({ className }) => {
       {/* For larger screens, show sidebar also */}
       <aside
         className={`
-          h-full hidden sm:flex flex-col gap-2 items-start px-[4px] 
+          h-screen hidden sm:flex flex-col gap-2 items-start px-[4px] 
           sticky top-0 z-10 ${className}
         `}
       >
@@ -76,14 +77,10 @@ const Sidebar: React.FC<SidebarProps> = ({ className }) => {
         {viewportWidth >= BREAKPOINT ? (
           sidebars[sidebarIdx]
         ) : (
-          // Smaller screens
-          <div className="hidden sm:flex">
-            <MiniSidebar
-              className="pt-1 hidden sm:flex xl:hidden"
-              links={[...sidebarLinks[0]!, ...sidebarLinks[1]!]}
-            />
-            <FullSidebar className="hidden xl:flex" links={sidebarLinks} />
-          </div>
+          <MiniSidebar // Smaller screens
+            className="pt-1 hidden sm:flex xl:hidden"
+            links={[...sidebarLinks[0]!, ...sidebarLinks[1]!]}
+          />
         )}
       </aside>
       <AppDrawer
