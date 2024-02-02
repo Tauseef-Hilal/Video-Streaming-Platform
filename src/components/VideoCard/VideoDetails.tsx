@@ -25,12 +25,15 @@ const VideoDetails: React.FC<VideoDetailsProps> = ({
   return (
     <div className="flex justify-between items-start">
       <div className="flex gap-3 items-start">
-        <Image
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
           src={channelThumbnail.url}
           alt="Channel Thumbnail"
           className="rounded-full flex-shrink-0"
           width={40}
           height={40}
+          loading="lazy"
+          decoding="async"
         />
         <div>
           <h2 className="font-medium line-clamp-2">{videoSnippet.title}</h2>

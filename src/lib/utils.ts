@@ -76,14 +76,12 @@ export function getFormattedDuration(duration: string): string {
 
 export function resetBodyScroll() {
   document.body.style.overflow = "unset";
-  document.body.style.borderRight = "unset";
-  document.getElementsByTagName("header")[0].style.borderRight = "unset";
+  document.body.classList.remove("scroll-border");
+  document.getElementById("header")!.classList.remove("scroll-border");
 }
 
 export function disableBodyScroll() {
   document.body.style.overflow = "hidden";
-  document.body.style.borderRight =
-    `${SCROLLBAR_WIDTH}px solid ` + `${SCROLLBAR_BG}`;
-  document.getElementById("header")!.style.borderRight =
-    `${SCROLLBAR_WIDTH}px solid ` + `${SCROLLBAR_BG}`;
+  document.body.classList.add("scroll-border");
+  document.getElementById("header")!.classList.add("scroll-border");
 }

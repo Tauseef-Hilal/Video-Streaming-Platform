@@ -18,12 +18,15 @@ const VideoPreview: React.FC<VideoPreviewProps> = ({
 
   return (
     <div className="relative flex justify-center flex-col">
-      <Image
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
         src={thumbnail.url}
         width={thumbnail.width}
         height={thumbnail.height}
         className="rounded-xl w-full object-cover aspect-video"
         alt="Video Thumbnail"
+        loading="lazy"
+        decoding="async"
       />
       {durationStr ? (
         <span
