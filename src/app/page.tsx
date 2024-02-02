@@ -6,6 +6,7 @@ import Video from "@/types/video";
 import VideoCard from "@/components/VideoCard/VideoCard";
 import LoadingIndicator from "@/components/LoadingIndicator";
 import ErrorComponent from "@/components/ErrorComponent";
+import { fetchVideosFromYoutube } from "@/lib/actions";
 
 type HomePageState = "LOADING" | "SUCCESS" | "ERROR";
 
@@ -14,10 +15,16 @@ export default function HomePage() {
   const [videos, setVideos] = useState<Video[]>([]);
 
   const fetchVideos = () => {
-    const cache = localStorage.getItem("cachedVideos");
-    setVideos(JSON.parse(cache!));
-    setState("SUCCESS");
-    return;
+    fetchVideosFromYoutube()
+      .then((data) => {
+        setVideos(data);
+        setState("SUCCESS");
+      })
+      .catch((_) => {
+        setTimeout(() => setState("ERROR"), 1000);
+      });
+
+    setState("LOADING");
   };
 
   useEffect(() => {
