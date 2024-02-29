@@ -9,7 +9,8 @@
     "lint": "next lint",
     "gen-server": "graphql-codegen --config codegen-server.ts",
     "gen-client": "graphql-codegen --config codegen-client.ts",
-    "generate": "npm run gen-server && npm run gen-client"
+    "generate": "npm run gen-server && npm run gen-client",
+    "postinstall": "prisma generate"
   },
   "dependencies": {
     "@apollo/client": "^3.9.5",
