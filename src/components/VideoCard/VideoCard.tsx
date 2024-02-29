@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 
-import Video from "@/lib/types/video";
 import VideoPreview from "./VideoPreview";
 import VideoDetails from "./VideoDetails";
 import { FragmentType, useFragment } from "@/lib/graphql/client/generated";

@@ -1,8 +1,6 @@
-import Image from "next/image";
 import { BsBroadcast } from "react-icons/bs";
 
 import { getFormattedDuration } from "@/lib/utils/abc";
-import { ThumbnailGroup } from "@/lib/types/thumbnail";
 import { FragmentType, useFragment } from "@/lib/graphql/client/generated";
 import {
   ThumbnailGroupItemFragmentDoc,
