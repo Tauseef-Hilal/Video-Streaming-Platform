@@ -3,7 +3,7 @@
 import { SidebarLink } from "./data";
 import SidebarSection from "./SidebarSection";
 import AdditionalLinks from "./AdditionalLinks";
-import { disableBodyScroll, resetBodyScroll } from "@/lib/utils";
+import { disableBodyScroll, resetBodyScroll } from "@/lib/utils/abc";
 
 interface FullSidebarProps {
   links: (SidebarLink[] | null)[];

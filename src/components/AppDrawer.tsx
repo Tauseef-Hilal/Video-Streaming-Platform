@@ -5,7 +5,7 @@ import FullSidebar from "./Sidebar/FullSidebar";
 import sidebarLinks from "./Sidebar/data";
 import IconButton from "./IconButton";
 import Logo from "./Logo";
-import { resetBodyScroll } from "@/lib/utils";
+import { resetBodyScroll } from "@/lib/utils/abc";
 
 interface AppDrawerProps {
   visible: boolean;

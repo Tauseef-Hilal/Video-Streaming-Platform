@@ -1,5 +1,3 @@
-import { SCROLLBAR_BG, SCROLLBAR_WIDTH } from "./constants";
-
 export function areOnSameSideOfReference(
   value1: number,
   value2: number,

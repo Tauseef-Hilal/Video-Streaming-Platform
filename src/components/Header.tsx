@@ -8,7 +8,7 @@ import Search from "./Search";
 import IconButton from "./IconButton";
 import SignInButton from "./SignInButton";
 import { useViewportWidth } from "@/hooks/viewport";
-import { areOnSameSideOfReference } from "@/lib/utils";
+import { areOnSameSideOfReference } from "@/lib/utils/abc";
 import { FiMoreVertical } from "react-icons/fi";
 import { SCROLLBAR_WIDTH } from "@/lib/constants";
 
@@ -27,7 +27,6 @@ const Header: React.FC = () => {
       viewportWidth,
       SEARCH_BREAKPOINT
     );
-    return true;
   });
 
   // Whether Search covers whole header
@@ -81,13 +80,13 @@ const Header: React.FC = () => {
               onChange={handleSearchInputChange}
               onFocus={handleSearchInputFocus}
               onBlur={handleSearchInputBlur}
-              />
+            />
             <IconButton
               className="sm:block"
               icon={BiMicrophone}
               size={24}
               tip="Voice"
-              />
+            />
           </>
         ) : (
           <>
@@ -99,7 +98,7 @@ const Header: React.FC = () => {
                 hidden flex-auto md:flex items-center gap-2 md:max-w-[424px] 
                 lg:max-w-[600px] h-min
               `}
-              >
+            >
               <Search
                 key={"123"}
                 value={searchValue}

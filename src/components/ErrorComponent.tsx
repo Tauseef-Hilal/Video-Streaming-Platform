@@ -2,7 +2,7 @@ import { PiSmileySadFill } from "react-icons/pi";
 
 interface ErrorProps {
   text: string;
-  onRetryClick: () => void;
+  onRetryClick?: () => void;
 }
 
 const ErrorComponent: React.FC<ErrorProps> = ({ text, onRetryClick }) => {
@@ -15,8 +15,8 @@ const ErrorComponent: React.FC<ErrorProps> = ({ text, onRetryClick }) => {
           role="button"
           onClick={onRetryClick}
           className={`
-        bg-[#47474796] px-4 py-1 mt-4 rounded-lg hover:bg-[#474747c7]
-      `}
+            bg-[#47474796] px-4 py-1 mt-4 rounded-lg hover:bg-[#474747c7]
+          `}
         >
           Retry
         </div>

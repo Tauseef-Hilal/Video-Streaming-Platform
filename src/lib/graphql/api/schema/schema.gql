@@ -1,0 +1,111 @@
+type Query {
+  greetings: String!
+  videos(
+    skip: Int
+    take: Int
+    filter: String
+    sortBy: VideoSortByInput
+  ): [Video!]!
+}
+
+input VideoSortByInput {
+  title: SortOrder
+  publishedAt: SortOrder
+}
+
+enum SortOrder {
+  asc
+  desc
+}
+
+type Video {
+  id: ID!
+  platform: Platform!
+  snippet: VideoSnippet!
+  contentDetails: VideoContentDetails!
+  statistics: VideoStatistics!
+}
+
+enum Platform {
+  YouTube
+  FusionFlix
+}
+
+type VideoSnippet {
+  id: ID!
+  title: String!
+  description: String!
+  publishedAt: String!
+  tags: [String!]!
+  thumbnails: ThumbnailGroup!
+  channel: Channel!
+  category: Category!
+}
+
+type VideoContentDetails {
+  id: ID!
+  duration: String!
+  hasCaption: Boolean!
+}
+
+type VideoStatistics {
+  id: ID!
+  viewCount: String!
+  likeCount: String!
+  commentCount: String!
+}
+
+type Category {
+  id: ID!
+  title: String!
+  assignable: Boolean
+  videos(
+    skip: Int
+    take: Int
+    filter: String
+    sortBy: VideoSortByInput
+  ): [Video!]!
+}
+
+type Channel {
+  id: ID!
+  platform: Platform!
+  snippet: ChannelSnippet!
+  statistics: ChannelStatistics!
+  videos(
+    skip: Int
+    take: Int
+    filter: String
+    sortBy: VideoSortByInput
+  ): [Video!]!
+}
+
+type ChannelSnippet {
+  id: ID!
+  title: String!
+  description: String!
+  country: String!
+  keywords: [String!]!
+  thumbnails: ThumbnailGroup!
+}
+
+type ChannelStatistics {
+  id: ID!
+  viewCount: String!
+  subscriberCount: String!
+  videoCount: String!
+}
+
+type ThumbnailGroup {
+  id: ID!
+  low: Thumbnail!
+  medium: Thumbnail
+  high: Thumbnail
+}
+
+type Thumbnail {
+  id: ID!
+  url: String!
+  width: Int!
+  height: Int!
+}

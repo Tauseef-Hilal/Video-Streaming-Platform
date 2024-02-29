@@ -2,16 +2,19 @@
 
 import { useState } from "react";
 
-import Video from "@/types/video";
+import Video from "@/lib/types/video";
 import VideoPreview from "./VideoPreview";
 import VideoDetails from "./VideoDetails";
+import { FragmentType, useFragment } from "@/lib/graphql/client/generated";
+import { VideoItemFragmentDoc } from "@/lib/graphql/client/generated/graphql";
 
 interface VideoCardProps {
-  video: Video;
+  v: FragmentType<typeof VideoItemFragmentDoc>;
 }
 
-const VideoCard: React.FC<VideoCardProps> = ({ video }) => {
+const VideoCard: React.FC<VideoCardProps> = ({ v }) => {
   const [showMoreBtn, setShowMoreBtn] = useState(false);
+  const video = useFragment(VideoItemFragmentDoc, v);
 
   return (
     <div
