@@ -1,0 +1,81 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Video {
+  id               String   @id @default(uuid())
+  title            String
+  description      String
+  publishedAt      String
+  duration         String
+  viewCount        String
+  likeCount        String
+  commentCount     String
+  hasCaption       Boolean
+  platform         Platform
+  tags             String[]
+  categoryId       String   @default("0")
+  channelId        String
+  thumbnailGroupId String   @unique
+
+  category   Category       @relation(fields: [categoryId], references: [id])
+  channel    Channel        @relation(fields: [channelId], references: [id])
+  thumbnails ThumbnailGroup @relation(fields: [thumbnailGroupId], references: [id])
+}
+
+model Channel {
+  id              String   @id @default(uuid())
+  title           String
+  description     String
+  country         String
+  viewCount       String
+  subscriberCount String
+  videoCount      String
+  keywords        String[]
+  platform        Platform
+
+  videos           Video[]
+  thumbnailGroupId String  @unique
+
+  thumbnails ThumbnailGroup @relation(fields: [thumbnailGroupId], references: [id])
+}
+
+model ThumbnailGroup {
+  id       String   @id @default(uuid())
+  lowId    String?  @unique @map("lowId")
+  mediumId String?  @unique
+  highId   String?  @unique
+  Video    Video?
+  Channel  Channel?
+
+  low    Thumbnail? @relation("ThumbnailLow", fields: [lowId], references: [id])
+  medium Thumbnail? @relation("ThumbnailMedium", fields: [mediumId], references: [id])
+  high   Thumbnail? @relation("ThumbnailHigh", fields: [highId], references: [id])
+}
+
+model Thumbnail {
+  id              String          @id @default(uuid())
+  url             String
+  height          Int
+  width           Int
+  thumbnailGroup1 ThumbnailGroup? @relation("ThumbnailLow")
+  thumbnailGroup2 ThumbnailGroup? @relation("ThumbnailMedium")
+  thumbnailGroup3 ThumbnailGroup? @relation("ThumbnailHigh")
+}
+
+model Category {
+  id         String  @id
+  title      String  @unique
+  assignable Boolean
+  videos     Video[]
+}
+
+enum Platform {
+  FusionFlix
+  YouTube
+}

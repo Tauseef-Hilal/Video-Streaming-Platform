@@ -1,0 +1,5 @@
+schema: src/lib/graphql/api/schema/schema.gql
+documents: src/lib/graphql/client/documents/**/*.gql
+extensions:
+  languageService:
+    cacheSchemaFileForLookup: true

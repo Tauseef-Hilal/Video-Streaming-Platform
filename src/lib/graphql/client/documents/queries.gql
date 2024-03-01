@@ -1,0 +1,5 @@
+query Feed {
+  videos(take: 50, sortBy: { publishedAt: desc }) {
+    ...VideoItem
+  }
+}

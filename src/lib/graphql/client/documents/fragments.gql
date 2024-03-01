@@ -1,0 +1,51 @@
+fragment ThumbnailItem on Thumbnail {
+  id
+  url
+  width
+  height
+}
+
+fragment ThumbnailGroupItem on ThumbnailGroup {
+  id
+  low {
+    ...ThumbnailItem
+  }
+  medium {
+    ...ThumbnailItem
+  }
+  high {
+    ...ThumbnailItem
+  }
+}
+
+fragment VideoItem on Video {
+  id
+  snippet {
+    id
+    title
+    description
+    publishedAt
+    thumbnails {
+      ...ThumbnailGroupItem
+    }
+    channel {
+      id
+      snippet {
+        title
+        thumbnails {
+          ...ThumbnailGroupItem
+        }
+      }
+    }
+  }
+  contentDetails {
+    id
+    duration
+    hasCaption
+  }
+  statistics {
+    viewCount
+    likeCount
+    commentCount
+  }
+}

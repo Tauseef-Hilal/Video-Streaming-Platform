@@ -1,11 +1,14 @@
-import Image from "next/image";
 import { BsBroadcast } from "react-icons/bs";
 
-import { getFormattedDuration } from "@/lib/utils";
-import { ThumbnailGroup } from "@/types/thumbnail";
+import { getFormattedDuration } from "@/lib/utils/abc";
+import { FragmentType, useFragment } from "@/lib/graphql/client/generated";
+import {
+  ThumbnailGroupItemFragmentDoc,
+  ThumbnailItemFragmentDoc,
+} from "@/lib/graphql/client/generated/graphql";
 
 interface VideoPreviewProps {
-  thumbnails: ThumbnailGroup;
+  thumbnails: FragmentType<typeof ThumbnailGroupItemFragmentDoc>;
   duration: string;
 }
 
@@ -14,7 +17,11 @@ const VideoPreview: React.FC<VideoPreviewProps> = ({
   duration,
 }) => {
   const durationStr = getFormattedDuration(duration);
-  const thumbnail = thumbnails.high ?? thumbnails.medium ?? thumbnails.low;
+  const t = useFragment(ThumbnailGroupItemFragmentDoc, thumbnails);
+  const thumbnail = useFragment(
+    ThumbnailItemFragmentDoc,
+    t.high ?? t.medium ?? t.low
+  );
 
   return (
     <div className="relative flex justify-center flex-col">

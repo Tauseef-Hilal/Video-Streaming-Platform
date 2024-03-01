@@ -1,58 +1,29 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useQuery } from "@apollo/client";
 
-import Video from "@/types/video";
-import VideoCard from "@/components/VideoCard/VideoCard";
 import LoadingIndicator from "@/components/LoadingIndicator";
 import ErrorComponent from "@/components/ErrorComponent";
-import { fetchVideosFromYoutube } from "@/lib/actions";
-
-type HomePageState = "LOADING" | "SUCCESS" | "ERROR";
+import VideoCard from "@/components/VideoCard/VideoCard";
+import { FeedDocument } from "@/lib/graphql/client/generated/graphql";
 
 export default function HomePage() {
-  const [state, setState] = useState<HomePageState>("LOADING");
-  const [videos, setVideos] = useState<Video[]>([]);
+  const { loading, error, data, refetch } = useQuery(FeedDocument);
 
-  const fetchVideos = () => {
-    fetchVideosFromYoutube()
-      .then((data) => {
-        setVideos(data);
-        setState("SUCCESS");
-      })
-      .catch((_) => {
-        setTimeout(() => setState("ERROR"), 1000);
-      });
+  if (loading) return <LoadingIndicator className="h-full" />;
+  if (error)
+    return <ErrorComponent text={error.message} onRetryClick={refetch} />;
 
-    setState("LOADING");
-  };
-
-  useEffect(() => {
-    fetchVideos();
-  }, []);
-
-  switch (state) {
-    case "LOADING":
-      return <LoadingIndicator className="h-full" />;
-    case "ERROR":
-      return (
-        <ErrorComponent
-          text="Oops! Something went wrong"
-          onRetryClick={() => fetchVideos()}
-        />
-      );
-    default:
-      return (
-        <div
-          className={`
-            h-full grid gap-8 place-content-start justify-center grid-cols-1
-            md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4
-          `}
-        >
-          {videos.map((video) => (
-            <VideoCard key={video.id} video={video} />
-          ))}
-        </div>
-      );
-  }
+  return (
+    <div
+      className={`
+        h-full grid gap-8 place-content-start justify-center grid-cols-1
+        md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4
+      `}
+    >
+      {data?.videos.map((video, idx) => (
+        <VideoCard key={idx} v={video} />
+      ))}
+    </div>
+  );
 }
