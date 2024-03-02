@@ -10,6 +10,7 @@
 body {
   color-scheme: dark;
   scroll-behavior: smooth;
+  overflow-y: scroll;
   background-color: var(--background-color);
   color: var(--text-color);
 }
