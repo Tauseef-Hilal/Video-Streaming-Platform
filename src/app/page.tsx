@@ -22,7 +22,7 @@ export default function HomePage() {
       `}
     >
       {data?.videos.map((video, idx) => (
-        <VideoCard key={idx} v={video} />
+        <VideoCard key={idx} videoFragment={video} />
       ))}
     </div>
   );

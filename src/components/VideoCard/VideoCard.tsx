@@ -8,12 +8,12 @@ import { FragmentType, useFragment } from "@/lib/graphql/client/generated";
 import { VideoItemFragmentDoc } from "@/lib/graphql/client/generated/graphql";
 
 interface VideoCardProps {
-  v: FragmentType<typeof VideoItemFragmentDoc>;
+  videoFragment: FragmentType<typeof VideoItemFragmentDoc>;
 }
 
-const VideoCard: React.FC<VideoCardProps> = ({ v }) => {
+const VideoCard: React.FC<VideoCardProps> = ({ videoFragment }) => {
   const [showMoreBtn, setShowMoreBtn] = useState(false);
-  const video = useFragment(VideoItemFragmentDoc, v);
+  const video = useFragment(VideoItemFragmentDoc, videoFragment);
 
   return (
     <div
@@ -22,7 +22,7 @@ const VideoCard: React.FC<VideoCardProps> = ({ v }) => {
       onMouseLeave={() => setShowMoreBtn(false)}
     >
       <VideoPreview
-        thumbnails={video.snippet.thumbnails}
+        thumbnailGroupFragment={video.snippet.thumbnails}
         duration={video.contentDetails.duration}
       />
       <VideoDetails

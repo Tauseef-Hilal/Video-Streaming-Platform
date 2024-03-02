@@ -8,19 +8,22 @@ import {
 } from "@/lib/graphql/client/generated/graphql";
 
 interface VideoPreviewProps {
-  thumbnails: FragmentType<typeof ThumbnailGroupItemFragmentDoc>;
+  thumbnailGroupFragment: FragmentType<typeof ThumbnailGroupItemFragmentDoc>;
   duration: string;
 }
 
 const VideoPreview: React.FC<VideoPreviewProps> = ({
-  thumbnails,
+  thumbnailGroupFragment,
   duration,
 }) => {
   const durationStr = getFormattedDuration(duration);
-  const t = useFragment(ThumbnailGroupItemFragmentDoc, thumbnails);
+  const thumbnails = useFragment(
+    ThumbnailGroupItemFragmentDoc,
+    thumbnailGroupFragment
+  );
   const thumbnail = useFragment(
     ThumbnailItemFragmentDoc,
-    t.high ?? t.medium ?? t.low
+    thumbnails.high ?? thumbnails.medium ?? thumbnails.low
   );
 
   return (
