@@ -6,6 +6,7 @@ import {
   ThumbnailGroupItemFragmentDoc,
   ThumbnailItemFragmentDoc,
 } from "@/lib/graphql/client/generated/graphql";
+import LazyImage from "../LazyImage";
 
 interface VideoPreviewProps {
   thumbnailGroupFragment: FragmentType<typeof ThumbnailGroupItemFragmentDoc>;
@@ -28,15 +29,12 @@ const VideoPreview: React.FC<VideoPreviewProps> = ({
 
   return (
     <div className="relative flex justify-center flex-col">
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img
+      <LazyImage
         src={thumbnail.url}
         width={thumbnail.width}
         height={thumbnail.height}
         className="rounded-xl w-full object-cover aspect-video"
         alt="Video Thumbnail"
-        loading="lazy"
-        decoding="async"
       />
       {durationStr ? (
         <span

@@ -7,6 +7,7 @@ import {
   VideoItemFragment,
 } from "@/lib/graphql/client/generated/graphql";
 import { useFragment } from "@/lib/graphql/client/generated";
+import LazyImage from "../LazyImage";
 
 interface VideoDetailsProps {
   videoSnippet: VideoItemFragment["snippet"];
@@ -30,15 +31,12 @@ const VideoDetails: React.FC<VideoDetailsProps> = ({
   return (
     <div className="flex justify-between items-start">
       <div className="flex gap-3 items-start">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
+        <LazyImage
           src={thumbnail.url}
           alt="Channel Thumbnail"
           className="rounded-full flex-shrink-0"
           width={40}
           height={40}
-          loading="lazy"
-          decoding="async"
         />
         <div>
           <h2 className="font-medium line-clamp-2">{videoSnippet.title}</h2>
