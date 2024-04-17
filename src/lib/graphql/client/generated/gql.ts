@@ -14,7 +14,7 @@ import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/
  */
 const documents = {
     "fragment ThumbnailItem on Thumbnail {\n  id\n  url\n  width\n  height\n}\n\nfragment ThumbnailGroupItem on ThumbnailGroup {\n  id\n  low {\n    ...ThumbnailItem\n  }\n  medium {\n    ...ThumbnailItem\n  }\n  high {\n    ...ThumbnailItem\n  }\n}\n\nfragment VideoItem on Video {\n  id\n  snippet {\n    id\n    title\n    description\n    publishedAt\n    thumbnails {\n      ...ThumbnailGroupItem\n    }\n    channel {\n      id\n      snippet {\n        title\n        thumbnails {\n          ...ThumbnailGroupItem\n        }\n      }\n    }\n  }\n  contentDetails {\n    id\n    duration\n    hasCaption\n  }\n  statistics {\n    viewCount\n    likeCount\n    commentCount\n  }\n}": types.ThumbnailItemFragmentDoc,
-    "query Feed {\n  videos(take: 50, sortBy: {publishedAt: desc}) {\n    ...VideoItem\n  }\n}": types.FeedDocument,
+    "query Feed($skip: Int) {\n  videos(skip: $skip, take: 25, sortBy: {publishedAt: desc}) {\n    ...VideoItem\n  }\n}": types.FeedDocument,
 };
 
 /**
@@ -38,7 +38,7 @@ export function graphql(source: "fragment ThumbnailItem on Thumbnail {\n  id\n  
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "query Feed {\n  videos(take: 50, sortBy: {publishedAt: desc}) {\n    ...VideoItem\n  }\n}"): (typeof documents)["query Feed {\n  videos(take: 50, sortBy: {publishedAt: desc}) {\n    ...VideoItem\n  }\n}"];
+export function graphql(source: "query Feed($skip: Int) {\n  videos(skip: $skip, take: 25, sortBy: {publishedAt: desc}) {\n    ...VideoItem\n  }\n}"): (typeof documents)["query Feed($skip: Int) {\n  videos(skip: $skip, take: 25, sortBy: {publishedAt: desc}) {\n    ...VideoItem\n  }\n}"];
 
 export function graphql(source: string) {
   return (documents as any)[source] ?? {};
