@@ -1,5 +1,10 @@
-query Feed($skip: Int) {
-  videos(skip: $skip, take: 25, sortBy: { publishedAt: desc }) {
+query Feed($skip: Int, $filter: String) {
+  videos(
+    filter: $filter
+    skip: $skip
+    take: 25
+    sortBy: { publishedAt: desc }
+  ) {
     ...VideoItem
   }
 }

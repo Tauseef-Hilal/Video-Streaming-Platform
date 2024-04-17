@@ -1,31 +1,32 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { useApolloClient } from "@apollo/client";
-
-import LoadingIndicator from "@/components/LoadingIndicator";
 import ErrorComponent from "@/components/ErrorComponent";
+import LazyLoader from "@/components/LazyLoader";
+import LoadingIndicator from "@/components/LoadingIndicator";
 import VideoCard from "@/components/VideoCard/VideoCard";
 import {
   FeedDocument,
   FeedQuery,
 } from "@/lib/graphql/client/generated/graphql";
-import LazyLoader from "@/components/LazyLoader";
+import { useApolloClient } from "@apollo/client";
+import { useSearchParams } from "next/navigation";
+import { useEffect, useState } from "react";
 import { MdMoreHoriz } from "react-icons/md";
 
-export default function HomePage() {
+export default function ResultsPage() {
+  const searchParams = useSearchParams();
+  const query = searchParams.get("query");
+
   const client = useApolloClient();
   const [hasMoreVideos, setHasMoreVideos] = useState(true);
   const [videos, setVideos] = useState<FeedQuery["videos"]>([]);
   const [status, setStatus] = useState<"LOADING" | "ERROR" | "SUCCESS">(
     "LOADING"
   );
-  const fetchVideos = async () => {
-    if (!hasMoreVideos) return;
-
+  const fetchVideos = async (shouldSkip: boolean = true) => {
     const { loading, error, data } = await client.query({
       query: FeedDocument,
-      variables: { skip: videos.length },
+      variables: { skip: shouldSkip ? videos.length : 0, filter: query },
     });
 
     if (loading) setStatus("LOADING");
@@ -34,16 +35,17 @@ export default function HomePage() {
       setStatus("SUCCESS");
       if (data.videos.length === 0) {
         setHasMoreVideos(false);
+        if (!shouldSkip) setVideos([]);
       } else {
-        setVideos((v) => [...v, ...data.videos]);
+        setVideos((v) => (shouldSkip ? [...v, ...data.videos] : data.videos));
       }
     }
   };
 
   useEffect(() => {
-    fetchVideos();
+    fetchVideos(false);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [query]);
 
   if (status == "LOADING") return <LoadingIndicator className="h-full" />;
   if (status == "ERROR")
@@ -58,14 +60,18 @@ export default function HomePage() {
     <div className="flex flex-col gap-5">
       <div
         className={`
-          h-full grid gap-8 place-content-start justify-center grid-cols-1
-          md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4
+          h-full max-w-[90%] grid grid-cols-1 gap-5
+          place-content-start m-auto
         `}
       >
         {videos.map((video, idx) => (
           <VideoCard key={idx} videoFragment={video} />
         ))}
       </div>
+
+      {videos.length == 0 && (
+        <p className="text-gray-300 text-center">No results found</p>
+      )}
 
       {hasMoreVideos ? (
         <LazyLoader onScrollIntoView={fetchVideos} />

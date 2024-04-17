@@ -28,7 +28,7 @@ const VideoPreview: React.FC<VideoPreviewProps> = ({
   );
 
   return (
-    <div className="relative flex justify-center flex-col">
+    <div className="relative w-full">
       <LazyImage
         src={thumbnail.url}
         width={thumbnail.width}

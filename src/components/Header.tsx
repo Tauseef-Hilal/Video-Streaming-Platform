@@ -11,14 +11,20 @@ import { useViewportWidth } from "@/hooks/viewport";
 import { areOnSameSideOfReference } from "@/lib/utils/abc";
 import { FiMoreVertical } from "react-icons/fi";
 import { SCROLLBAR_WIDTH } from "@/lib/constants";
+import { useRouter, useSearchParams } from "next/navigation";
 
 // Used to decide whether search bar covers whole header
 const SEARCH_BREAKPOINT = 768 + SCROLLBAR_WIDTH;
 
 const Header: React.FC = () => {
-  const [searchValue, setSearchValue] = useState("");
   const [searchFocussed, setSearchFocussed] = useState(false);
   const [showWideSearchBar, setShowWideSearchBar] = useState(false);
+
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const [searchValue, setSearchValue] = useState(
+    searchParams.get("query") ?? ""
+  );
 
   const viewportWidth = useViewportWidth((storedWidth, viewportWidth) => {
     // For limiting rebuilds
@@ -54,6 +60,10 @@ const Header: React.FC = () => {
     setSearchFocussed(!showWideSearchBar);
   };
 
+  const handleSearchButtonPress = () => {
+    router.push(`/results?query=${searchValue}`);
+  };
+
   return (
     <>
       {/* `z-20` so that the header renders over sidebar, making back button
@@ -80,6 +90,7 @@ const Header: React.FC = () => {
               onChange={handleSearchInputChange}
               onFocus={handleSearchInputFocus}
               onBlur={handleSearchInputBlur}
+              onSearch={handleSearchButtonPress}
             />
             <IconButton
               className="sm:block"
@@ -106,6 +117,7 @@ const Header: React.FC = () => {
                 onChange={handleSearchInputChange}
                 onFocus={handleSearchInputFocus}
                 onBlur={handleSearchInputBlur}
+                onSearch={handleSearchButtonPress}
               />
               <IconButton
                 className={`bg-neutral-800 hover:bg-neutral-700`}
