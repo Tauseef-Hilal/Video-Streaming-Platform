@@ -7,6 +7,7 @@ import Sidebar from "@/components/Sidebar/Sidebar";
 import ApolloWrapper from "../components/ApolloWrapper";
 import { roboto } from "@/global/fonts";
 import { SCROLLBAR_BG } from "@/lib/constants";
+import { Suspense } from "react";
 
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.APP_URL ?? "https://localhost:3000"),
@@ -25,7 +26,9 @@ export default function RootLayout({
       </head>
       <ApolloWrapper>
         <body className={`${roboto.className}`}>
-          <Header />
+          <Suspense>
+            <Header />
+          </Suspense>
           <div className="flex">
             <Sidebar className="pt-2" />
             <main className="min-h-screen w-full pt-[68px] p-4">

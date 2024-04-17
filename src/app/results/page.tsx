@@ -10,10 +10,18 @@ import {
 } from "@/lib/graphql/client/generated/graphql";
 import { useApolloClient } from "@apollo/client";
 import { useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { MdMoreHoriz } from "react-icons/md";
 
 export default function ResultsPage() {
+  return (
+    <Suspense>
+      <ResultsFeed />
+    </Suspense>
+  );
+}
+
+const ResultsFeed: React.FC = () => {
   const searchParams = useSearchParams();
   const query = searchParams.get("query");
 
@@ -60,7 +68,7 @@ export default function ResultsPage() {
     <div className="flex flex-col gap-5">
       <div
         className={`
-          h-full max-w-[90%] grid grid-cols-1 gap-5
+          h-full max-w-[90%] xl:max-w-[80%] 2xl:max-w-[70%] grid grid-cols-1 gap-5
           place-content-start m-auto
         `}
       >
@@ -82,4 +90,4 @@ export default function ResultsPage() {
       )}
     </div>
   );
-}
+};
