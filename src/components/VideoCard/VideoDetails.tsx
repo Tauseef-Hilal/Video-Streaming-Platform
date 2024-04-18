@@ -1,14 +1,14 @@
+import { usePathname } from "next/navigation";
 import { FiMoreVertical } from "react-icons/fi";
 
-import { getFormattedDifference, getFormattedViewCount } from "@/lib/utils/abc";
 import {
   ThumbnailGroupItemFragmentDoc,
   ThumbnailItemFragmentDoc,
   VideoItemFragment,
 } from "@/lib/graphql/client/generated/graphql";
-import { useFragment } from "@/lib/graphql/client/generated";
 import LazyImage from "../LazyImage";
-import { usePathname } from "next/navigation";
+import { useFragment } from "@/lib/graphql/client/generated";
+import { getFormattedDifference, getFormattedViewCount } from "@/lib/utils/abc";
 
 interface VideoDetailsProps {
   videoSnippet: VideoItemFragment["snippet"];
@@ -45,7 +45,9 @@ const VideoDetails: React.FC<VideoDetailsProps> = ({
         <div className="flex flex-col">
           {onResultsPage ? (
             <>
-              <h2 className="font-medium line-clamp-1">{videoSnippet.title}</h2>
+              <h2 className="font-medium line-clamp-1 ">
+                {videoSnippet.title}
+              </h2>
               <p className="text-sm text-neutral-400">
                 {viewCount} views • {timeSinceUpload} ago
               </p>

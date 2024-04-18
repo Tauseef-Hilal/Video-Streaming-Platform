@@ -1,11 +1,11 @@
 import { BsBroadcast } from "react-icons/bs";
 
-import { getFormattedDuration } from "@/lib/utils/abc";
-import { FragmentType, useFragment } from "@/lib/graphql/client/generated";
 import {
   ThumbnailGroupItemFragmentDoc,
   ThumbnailItemFragmentDoc,
 } from "@/lib/graphql/client/generated/graphql";
+import { FragmentType, useFragment } from "@/lib/graphql/client/generated";
+import { getFormattedDuration } from "@/lib/utils/abc";
 import LazyImage from "../LazyImage";
 
 interface VideoPreviewProps {

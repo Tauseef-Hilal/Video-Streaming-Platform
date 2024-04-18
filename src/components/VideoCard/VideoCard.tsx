@@ -1,12 +1,12 @@
 "use client";
 
 import { useState } from "react";
+import { usePathname } from "next/navigation";
 
 import VideoPreview from "./VideoPreview";
 import VideoDetails from "./VideoDetails";
 import { FragmentType, useFragment } from "@/lib/graphql/client/generated";
 import { VideoItemFragmentDoc } from "@/lib/graphql/client/generated/graphql";
-import { usePathname } from "next/navigation";
 
 interface VideoCardProps {
   videoFragment: FragmentType<typeof VideoItemFragmentDoc>;
