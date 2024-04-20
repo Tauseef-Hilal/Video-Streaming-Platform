@@ -31,9 +31,7 @@ export default function RootLayout({
           </Suspense>
           <div className="flex">
             <Sidebar className="pt-2" />
-            <main className="min-h-screen w-full pt-[68px] p-4">
-              {children}
-            </main>
+            <main className="min-h-screen w-full pt-[68px]">{children}</main>
           </div>
         </body>
       </ApolloWrapper>

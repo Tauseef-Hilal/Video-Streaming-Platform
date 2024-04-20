@@ -86,7 +86,7 @@ const VideoDetails: React.FC<VideoDetailsProps> = ({
           )}
         </div>
       </div>
-      <div className="w-8 flex justify-end">
+      <div className="w-4 flex-shrink-0 flex justify-end">
         {showMoreBtn && <FiMoreVertical className="text-lg" />}
       </div>
     </div>

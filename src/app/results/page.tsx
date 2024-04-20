@@ -22,7 +22,7 @@ const ResultsFeed: React.FC = () => {
       query={query ?? ""}
       className={`
         h-full max-w-[90%] xl:max-w-[80%] 2xl:max-w-[70%] grid grid-cols-1 
-        gap-5 place-content-start m-auto
+        gap-5 place-content-start m-auto p-4
       `}
     />
   );
