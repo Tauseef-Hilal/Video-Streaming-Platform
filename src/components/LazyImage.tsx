@@ -22,8 +22,7 @@ const LazyImage: React.FC<LazyImageProps> = ({
   useEffect(() => {
     const observer = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
-        if (entry.isIntersecting)
-          setShouldRenderImage(true);
+        if (entry.isIntersecting) setShouldRenderImage(true);
       });
     });
 

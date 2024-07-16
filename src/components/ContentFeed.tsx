@@ -12,13 +12,21 @@ import VideoCard from "./VideoCard/VideoCard";
 import LazyLoader from "./LazyLoader";
 import LoadingIndicator from "./LoadingIndicator";
 import ErrorComponent from "./ErrorComponent";
+import LoadMore from "./LoadMore";
 
 interface ContentFeedProps {
   query: string;
-  className: string;
+  className?: string;
+  videoCardClassName?: string;
+  infiniteScroll?: boolean;
 }
 
-const ContentFeed: React.FC<ContentFeedProps> = ({ query, className }) => {
+const ContentFeed: React.FC<ContentFeedProps> = ({
+  query,
+  className,
+  videoCardClassName,
+  infiniteScroll,
+}) => {
   const client = useApolloClient();
   const [hasMoreVideos, setHasMoreVideos] = useState(true);
   const [videos, setVideos] = useState<FeedQuery["videos"]>([]);
@@ -59,10 +67,14 @@ const ContentFeed: React.FC<ContentFeedProps> = ({ query, className }) => {
     );
 
   return (
-    <div className="flex flex-col gap-5">
-      <div className={className}>
+    <div className="flex flex-col gap-5 w-full">
+      <div className={className + " w-full"}>
         {videos.map((video, idx) => (
-          <VideoCard key={idx} videoFragment={video} />
+          <VideoCard
+            key={idx}
+            videoFragment={video}
+            className={videoCardClassName}
+          />
         ))}
       </div>
 
@@ -71,7 +83,13 @@ const ContentFeed: React.FC<ContentFeedProps> = ({ query, className }) => {
       )}
 
       {hasMoreVideos ? (
-        <LazyLoader onScrollIntoView={fetchVideos} />
+        <>
+          {infiniteScroll ? (
+            <LazyLoader onScrollIntoView={fetchVideos} />
+          ) : (
+            <LoadMore text="Show more" onClick={() => fetchVideos()} />
+          )}
+        </>
       ) : (
         <div className="grid place-content-center text-gray-400">
           <MdMoreHoriz size={30} />

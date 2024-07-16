@@ -10,9 +10,10 @@ import { VideoItemFragmentDoc } from "@/lib/graphql/client/generated/graphql";
 
 interface VideoCardProps {
   videoFragment: FragmentType<typeof VideoItemFragmentDoc>;
+  className?: string;
 }
 
-const VideoCard: React.FC<VideoCardProps> = ({ videoFragment }) => {
+const VideoCard: React.FC<VideoCardProps> = ({ videoFragment, className }) => {
   const [showMoreBtn, setShowMoreBtn] = useState(false);
   const video = useFragment(VideoItemFragmentDoc, videoFragment);
   const isResultsPage = usePathname().endsWith("/results");
@@ -22,6 +23,7 @@ const VideoCard: React.FC<VideoCardProps> = ({ videoFragment }) => {
       className={`
         flex items-start gap-4 flex-col 
         ${isResultsPage ? "sm:flex-row" : ""}
+        ${className}
       `}
       onMouseOver={() => setShowMoreBtn(true)}
       onMouseLeave={() => setShowMoreBtn(false)}

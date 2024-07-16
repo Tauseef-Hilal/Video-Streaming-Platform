@@ -28,7 +28,7 @@ const VideoPreview: React.FC<VideoPreviewProps> = ({
   );
 
   return (
-    <div className="relative w-full">
+    <div className="relative w-full overflow-hidden">
       <LazyImage
         src={thumbnail.url}
         width={thumbnail.width}
