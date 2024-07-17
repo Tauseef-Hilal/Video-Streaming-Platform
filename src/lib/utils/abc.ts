@@ -39,9 +39,7 @@ export function getFormattedDifference(timestamp: string) {
   return `${diff} ${suffix}${diff > 1 ? "s" : ""}`;
 }
 
-export function getFormattedViewCount(viewCountString: string): string {
-  const viewCount = parseInt(viewCountString);
-
+export function getFormattedViewCount(viewCount: number): string {
   if (viewCount < 1000) {
     return viewCount.toString();
   } else if (viewCount < 1_000_000) {
@@ -51,10 +49,12 @@ export function getFormattedViewCount(viewCountString: string): string {
   }
 }
 
-export function getFormattedDuration(duration: string): string {
+export function getFormattedDuration(duration: number): string {
+  const strDuration = duration.toString();
+
   // Regex to extract time from ISO 8601 format
   const regex = /PT(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?/;
-  const matches = duration.match(regex);
+  const matches = strDuration.match(regex);
 
   if (!matches) {
     return "";

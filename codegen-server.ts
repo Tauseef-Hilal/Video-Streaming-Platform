@@ -14,8 +14,6 @@ const config: CodegenConfig = {
           Category: "../models#CategoryModel",
           Channel: "../models#ChannelModel",
           ChannelSnippet: "../models#ChannelSnippetModel",
-          ThumbnailGroup: "../models#ThumbnailGroupModel",
-          Thumbnail: "../models#ThumbnailModel",
         },
       },
     },

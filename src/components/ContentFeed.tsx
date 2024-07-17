@@ -72,7 +72,7 @@ const ContentFeed: React.FC<ContentFeedProps> = ({
         {videos.map((video, idx) => (
           <VideoCard
             key={idx}
-            videoFragment={video}
+            video={video}
             className={videoCardClassName}
           />
         ))}

@@ -1,3 +1,5 @@
+scalar DateTime
+
 type Query {
   greetings: String!
   videos(
@@ -20,39 +22,35 @@ enum SortOrder {
 
 type Video {
   id: ID!
-  platform: Platform!
   snippet: VideoSnippet!
   contentDetails: VideoContentDetails!
   statistics: VideoStatistics!
 }
 
-enum Platform {
-  YouTube
-  FusionFlix
-}
-
 type VideoSnippet {
   id: ID!
+  url: String!
   title: String!
   description: String!
-  publishedAt: String!
+  publishedAt: DateTime!
+  updatedAt: DateTime!
   tags: [String!]!
-  thumbnails: ThumbnailGroup!
+  thumbnailUrl: String!
   channel: Channel!
   category: Category!
 }
 
 type VideoContentDetails {
   id: ID!
-  duration: String!
+  duration: Int!
   hasCaption: Boolean!
 }
 
 type VideoStatistics {
   id: ID!
-  viewCount: String!
-  likeCount: String!
-  commentCount: String!
+  viewCount: Int!
+  likeCount: Int!
+  commentCount: Int!
 }
 
 type Category {
@@ -69,7 +67,6 @@ type Category {
 
 type Channel {
   id: ID!
-  platform: Platform!
   snippet: ChannelSnippet!
   statistics: ChannelStatistics!
   videos(
@@ -86,26 +83,12 @@ type ChannelSnippet {
   description: String!
   country: String!
   keywords: [String!]!
-  thumbnails: ThumbnailGroup!
+  thumbnailUrl: String!
 }
 
 type ChannelStatistics {
   id: ID!
-  viewCount: String!
-  subscriberCount: String!
-  videoCount: String!
-}
-
-type ThumbnailGroup {
-  id: ID!
-  low: Thumbnail!
-  medium: Thumbnail
-  high: Thumbnail
-}
-
-type Thumbnail {
-  id: ID!
-  url: String!
-  width: Int!
-  height: Int!
+  viewCount: Int!
+  subscriberCount: Int!
+  videoCount: Int!
 }

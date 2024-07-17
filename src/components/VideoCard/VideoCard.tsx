@@ -5,17 +5,15 @@ import { usePathname } from "next/navigation";
 
 import VideoPreview from "./VideoPreview";
 import VideoDetails from "./VideoDetails";
-import { FragmentType, useFragment } from "@/lib/graphql/client/generated";
-import { VideoItemFragmentDoc } from "@/lib/graphql/client/generated/graphql";
+import { FeedQuery, Video } from "@/lib/graphql/client/generated/graphql";
 
 interface VideoCardProps {
-  videoFragment: FragmentType<typeof VideoItemFragmentDoc>;
+  video: FeedQuery["videos"][0];
   className?: string;
 }
 
-const VideoCard: React.FC<VideoCardProps> = ({ videoFragment, className }) => {
+const VideoCard: React.FC<VideoCardProps> = ({ video, className }) => {
   const [showMoreBtn, setShowMoreBtn] = useState(false);
-  const video = useFragment(VideoItemFragmentDoc, videoFragment);
   const isResultsPage = usePathname().endsWith("/results");
 
   return (
@@ -29,7 +27,7 @@ const VideoCard: React.FC<VideoCardProps> = ({ videoFragment, className }) => {
       onMouseLeave={() => setShowMoreBtn(false)}
     >
       <VideoPreview
-        thumbnailGroupFragment={video.snippet.thumbnails}
+        thumbnailUrl={video.snippet.thumbnailUrl}
         duration={video.contentDetails.duration}
       />
       <VideoDetails

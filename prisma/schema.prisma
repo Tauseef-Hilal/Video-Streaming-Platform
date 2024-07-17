@@ -7,75 +7,72 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Video {
-  id               String   @id @default(uuid())
-  title            String
-  description      String
-  publishedAt      String
-  duration         String
-  viewCount        String
-  likeCount        String
-  commentCount     String
-  hasCaption       Boolean
-  platform         Platform
-  tags             String[]
-  categoryId       String   @default("0")
-  channelId        String
-  thumbnailGroupId String   @unique
-
-  category   Category       @relation(fields: [categoryId], references: [id])
-  channel    Channel        @relation(fields: [channelId], references: [id])
-  thumbnails ThumbnailGroup @relation(fields: [thumbnailGroupId], references: [id])
+model User {
+  id        String   @id @default(uuid())
+  name      String
+  email     String   @unique
+  password  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  channel   Channel?
 }
 
 model Channel {
   id              String   @id @default(uuid())
+  url             String   @unique
   title           String
   description     String
   country         String
-  viewCount       String
-  subscriberCount String
-  videoCount      String
+  viewCount       Int
+  videoCount      Int
+  subscriberCount Int
   keywords        String[]
-  platform        Platform
+  thumbnailUrl    String   @unique
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  userId          String   @unique
 
-  videos           Video[]
-  thumbnailGroupId String  @unique
-
-  thumbnails ThumbnailGroup @relation(fields: [thumbnailGroupId], references: [id])
+  videos   Video[]
+  comments Comment[]
+  user     User      @relation(fields: [userId], references: [id])
 }
 
-model ThumbnailGroup {
-  id       String   @id @default(uuid())
-  lowId    String?  @unique @map("lowId")
-  mediumId String?  @unique
-  highId   String?  @unique
-  Video    Video?
-  Channel  Channel?
+model Video {
+  id           String   @id @default(uuid())
+  url          String   @unique
+  title        String
+  description  String
+  publishedAt  DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  duration     Int
+  viewCount    Int
+  likeCount    Int
+  commentCount Int
+  hasCaption   Boolean
+  tags         String[]
+  thumbnailUrl String   @unique
+  channelId    String
+  categoryId   Int   @default(0)
 
-  low    Thumbnail? @relation("ThumbnailLow", fields: [lowId], references: [id])
-  medium Thumbnail? @relation("ThumbnailMedium", fields: [mediumId], references: [id])
-  high   Thumbnail? @relation("ThumbnailHigh", fields: [highId], references: [id])
+  category Category  @relation(fields: [categoryId], references: [id])
+  channel  Channel   @relation(fields: [channelId], references: [id])
+  comments Comment[]
 }
 
-model Thumbnail {
-  id              String          @id @default(uuid())
-  url             String
-  height          Int
-  width           Int
-  thumbnailGroup1 ThumbnailGroup? @relation("ThumbnailLow")
-  thumbnailGroup2 ThumbnailGroup? @relation("ThumbnailMedium")
-  thumbnailGroup3 ThumbnailGroup? @relation("ThumbnailHigh")
+model Comment {
+  id        String   @id @default(uuid())
+  videoId   String
+  channelId String
+  content   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  video   Video   @relation(fields: [videoId], references: [id])
+  channel Channel @relation(fields: [channelId], references: [id])
 }
 
 model Category {
-  id         String  @id
-  title      String  @unique
-  assignable Boolean
-  videos     Video[]
-}
-
-enum Platform {
-  FusionFlix
-  YouTube
+  id     Int  @id
+  title  String  @unique
+  videos Video[]
 }

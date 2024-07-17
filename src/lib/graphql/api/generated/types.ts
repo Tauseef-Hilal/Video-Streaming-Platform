@@ -1,5 +1,5 @@
-import { GraphQLResolveInfo } from 'graphql';
-import { VideoModel, VideoSnippetModel, CategoryModel, ChannelModel, ChannelSnippetModel, ThumbnailGroupModel, ThumbnailModel } from '../models';
+import { GraphQLResolveInfo, GraphQLScalarType, GraphQLScalarTypeConfig } from 'graphql';
+import { VideoModel, VideoSnippetModel, CategoryModel, ChannelModel, ChannelSnippetModel } from '../models';
 import { Context } from '../context';
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
@@ -15,6 +15,7 @@ export type Scalars = {
   Boolean: { input: boolean; output: boolean; }
   Int: { input: number; output: number; }
   Float: { input: number; output: number; }
+  DateTime: { input: any; output: any; }
 };
 
 export type Category = {
@@ -36,7 +37,6 @@ export type CategoryVideosArgs = {
 export type Channel = {
   __typename?: 'Channel';
   id: Scalars['ID']['output'];
-  platform: Platform;
   snippet: ChannelSnippet;
   statistics: ChannelStatistics;
   videos: Array<Video>;
@@ -56,22 +56,17 @@ export type ChannelSnippet = {
   description: Scalars['String']['output'];
   id: Scalars['ID']['output'];
   keywords: Array<Scalars['String']['output']>;
-  thumbnails: ThumbnailGroup;
+  thumbnailUrl: Scalars['String']['output'];
   title: Scalars['String']['output'];
 };
 
 export type ChannelStatistics = {
   __typename?: 'ChannelStatistics';
   id: Scalars['ID']['output'];
-  subscriberCount: Scalars['String']['output'];
-  videoCount: Scalars['String']['output'];
-  viewCount: Scalars['String']['output'];
+  subscriberCount: Scalars['Int']['output'];
+  videoCount: Scalars['Int']['output'];
+  viewCount: Scalars['Int']['output'];
 };
-
-export enum Platform {
-  FusionFlix = 'FusionFlix',
-  YouTube = 'YouTube'
-}
 
 export type Query = {
   __typename?: 'Query';
@@ -92,34 +87,17 @@ export enum SortOrder {
   Desc = 'desc'
 }
 
-export type Thumbnail = {
-  __typename?: 'Thumbnail';
-  height: Scalars['Int']['output'];
-  id: Scalars['ID']['output'];
-  url: Scalars['String']['output'];
-  width: Scalars['Int']['output'];
-};
-
-export type ThumbnailGroup = {
-  __typename?: 'ThumbnailGroup';
-  high?: Maybe<Thumbnail>;
-  id: Scalars['ID']['output'];
-  low: Thumbnail;
-  medium?: Maybe<Thumbnail>;
-};
-
 export type Video = {
   __typename?: 'Video';
   contentDetails: VideoContentDetails;
   id: Scalars['ID']['output'];
-  platform: Platform;
   snippet: VideoSnippet;
   statistics: VideoStatistics;
 };
 
 export type VideoContentDetails = {
   __typename?: 'VideoContentDetails';
-  duration: Scalars['String']['output'];
+  duration: Scalars['Int']['output'];
   hasCaption: Scalars['Boolean']['output'];
   id: Scalars['ID']['output'];
 };
@@ -130,10 +108,12 @@ export type VideoSnippet = {
   channel: Channel;
   description: Scalars['String']['output'];
   id: Scalars['ID']['output'];
-  publishedAt: Scalars['String']['output'];
+  publishedAt: Scalars['DateTime']['output'];
   tags: Array<Scalars['String']['output']>;
-  thumbnails: ThumbnailGroup;
+  thumbnailUrl: Scalars['String']['output'];
   title: Scalars['String']['output'];
+  updatedAt: Scalars['DateTime']['output'];
+  url: Scalars['String']['output'];
 };
 
 export type VideoSortByInput = {
@@ -143,10 +123,10 @@ export type VideoSortByInput = {
 
 export type VideoStatistics = {
   __typename?: 'VideoStatistics';
-  commentCount: Scalars['String']['output'];
+  commentCount: Scalars['Int']['output'];
   id: Scalars['ID']['output'];
-  likeCount: Scalars['String']['output'];
-  viewCount: Scalars['String']['output'];
+  likeCount: Scalars['Int']['output'];
+  viewCount: Scalars['Int']['output'];
 };
 
 
@@ -225,14 +205,12 @@ export type ResolversTypes = {
   Channel: ResolverTypeWrapper<ChannelModel>;
   ChannelSnippet: ResolverTypeWrapper<ChannelSnippetModel>;
   ChannelStatistics: ResolverTypeWrapper<ChannelStatistics>;
+  DateTime: ResolverTypeWrapper<Scalars['DateTime']['output']>;
   ID: ResolverTypeWrapper<Scalars['ID']['output']>;
   Int: ResolverTypeWrapper<Scalars['Int']['output']>;
-  Platform: Platform;
   Query: ResolverTypeWrapper<{}>;
   SortOrder: SortOrder;
   String: ResolverTypeWrapper<Scalars['String']['output']>;
-  Thumbnail: ResolverTypeWrapper<ThumbnailModel>;
-  ThumbnailGroup: ResolverTypeWrapper<ThumbnailGroupModel>;
   Video: ResolverTypeWrapper<VideoModel>;
   VideoContentDetails: ResolverTypeWrapper<VideoContentDetails>;
   VideoSnippet: ResolverTypeWrapper<VideoSnippetModel>;
@@ -247,12 +225,11 @@ export type ResolversParentTypes = {
   Channel: ChannelModel;
   ChannelSnippet: ChannelSnippetModel;
   ChannelStatistics: ChannelStatistics;
+  DateTime: Scalars['DateTime']['output'];
   ID: Scalars['ID']['output'];
   Int: Scalars['Int']['output'];
   Query: {};
   String: Scalars['String']['output'];
-  Thumbnail: ThumbnailModel;
-  ThumbnailGroup: ThumbnailGroupModel;
   Video: VideoModel;
   VideoContentDetails: VideoContentDetails;
   VideoSnippet: VideoSnippetModel;
@@ -270,7 +247,6 @@ export type CategoryResolvers<ContextType = Context, ParentType extends Resolver
 
 export type ChannelResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Channel'] = ResolversParentTypes['Channel']> = {
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
-  platform?: Resolver<ResolversTypes['Platform'], ParentType, ContextType>;
   snippet?: Resolver<ResolversTypes['ChannelSnippet'], ParentType, ContextType>;
   statistics?: Resolver<ResolversTypes['ChannelStatistics'], ParentType, ContextType>;
   videos?: Resolver<Array<ResolversTypes['Video']>, ParentType, ContextType, Partial<ChannelVideosArgs>>;
@@ -282,51 +258,38 @@ export type ChannelSnippetResolvers<ContextType = Context, ParentType extends Re
   description?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   keywords?: Resolver<Array<ResolversTypes['String']>, ParentType, ContextType>;
-  thumbnails?: Resolver<ResolversTypes['ThumbnailGroup'], ParentType, ContextType>;
+  thumbnailUrl?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   title?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type ChannelStatisticsResolvers<ContextType = Context, ParentType extends ResolversParentTypes['ChannelStatistics'] = ResolversParentTypes['ChannelStatistics']> = {
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
-  subscriberCount?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  videoCount?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  viewCount?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  subscriberCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  videoCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  viewCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
+
+export interface DateTimeScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['DateTime'], any> {
+  name: 'DateTime';
+}
 
 export type QueryResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
   greetings?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   videos?: Resolver<Array<ResolversTypes['Video']>, ParentType, ContextType, Partial<QueryVideosArgs>>;
 };
 
-export type ThumbnailResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Thumbnail'] = ResolversParentTypes['Thumbnail']> = {
-  height?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
-  url?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  width?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-};
-
-export type ThumbnailGroupResolvers<ContextType = Context, ParentType extends ResolversParentTypes['ThumbnailGroup'] = ResolversParentTypes['ThumbnailGroup']> = {
-  high?: Resolver<Maybe<ResolversTypes['Thumbnail']>, ParentType, ContextType>;
-  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
-  low?: Resolver<ResolversTypes['Thumbnail'], ParentType, ContextType>;
-  medium?: Resolver<Maybe<ResolversTypes['Thumbnail']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-};
-
 export type VideoResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Video'] = ResolversParentTypes['Video']> = {
   contentDetails?: Resolver<ResolversTypes['VideoContentDetails'], ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
-  platform?: Resolver<ResolversTypes['Platform'], ParentType, ContextType>;
   snippet?: Resolver<ResolversTypes['VideoSnippet'], ParentType, ContextType>;
   statistics?: Resolver<ResolversTypes['VideoStatistics'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type VideoContentDetailsResolvers<ContextType = Context, ParentType extends ResolversParentTypes['VideoContentDetails'] = ResolversParentTypes['VideoContentDetails']> = {
-  duration?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  duration?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   hasCaption?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
@@ -337,18 +300,20 @@ export type VideoSnippetResolvers<ContextType = Context, ParentType extends Reso
   channel?: Resolver<ResolversTypes['Channel'], ParentType, ContextType>;
   description?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
-  publishedAt?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  publishedAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
   tags?: Resolver<Array<ResolversTypes['String']>, ParentType, ContextType>;
-  thumbnails?: Resolver<ResolversTypes['ThumbnailGroup'], ParentType, ContextType>;
+  thumbnailUrl?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   title?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  updatedAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
+  url?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type VideoStatisticsResolvers<ContextType = Context, ParentType extends ResolversParentTypes['VideoStatistics'] = ResolversParentTypes['VideoStatistics']> = {
-  commentCount?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  commentCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
-  likeCount?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  viewCount?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  likeCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  viewCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -357,9 +322,8 @@ export type Resolvers<ContextType = Context> = {
   Channel?: ChannelResolvers<ContextType>;
   ChannelSnippet?: ChannelSnippetResolvers<ContextType>;
   ChannelStatistics?: ChannelStatisticsResolvers<ContextType>;
+  DateTime?: GraphQLScalarType;
   Query?: QueryResolvers<ContextType>;
-  Thumbnail?: ThumbnailResolvers<ContextType>;
-  ThumbnailGroup?: ThumbnailGroupResolvers<ContextType>;
   Video?: VideoResolvers<ContextType>;
   VideoContentDetails?: VideoContentDetailsResolvers<ContextType>;
   VideoSnippet?: VideoSnippetResolvers<ContextType>;

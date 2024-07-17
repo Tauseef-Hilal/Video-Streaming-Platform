@@ -1,17 +1,16 @@
 const title = {
-  template: "%s | FusionFlix",
-  default: "FusionFlix",
+  template: "%s | VideoStreamingPlatform",
+  default: "VideoStreamingPlatform",
 };
 
 const description =
-  "Your Gateway to Infinite Entertainment! Immerse yourself in a world where diverse content seamlessly blends to create an unparalleled streaming experience. From trending hits to user-curated gems, FusionFlix caters to your every mood. Discover, share, and indulge in a fusion of entertainment like never before.";
+  "Your Gateway to Infinite Entertainment! Immerse yourself in a world where diverse content seamlessly blends to create an unparalleled streaming experience.";
 
 const authors = [
   { name: "Tauseef Hilal Tantary", url: "https://tantary-tauseef.vercel.app" },
 ];
 
 const keywords = [
-  "FusionFlix",
   "video streaming",
   "movies online",
   "TV shows streaming",
@@ -49,7 +48,6 @@ const keywords = [
   "cinema at your fingertips",
   "on-demand streaming",
   "streaming revolution",
-  "FusionFlix exclusives",
 ];
 
 const metadata = {

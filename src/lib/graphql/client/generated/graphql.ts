@@ -14,6 +14,7 @@ export type Scalars = {
   Boolean: { input: boolean; output: boolean; }
   Int: { input: number; output: number; }
   Float: { input: number; output: number; }
+  DateTime: { input: any; output: any; }
 };
 
 export type Category = {
@@ -35,7 +36,6 @@ export type CategoryVideosArgs = {
 export type Channel = {
   __typename?: 'Channel';
   id: Scalars['ID']['output'];
-  platform: Platform;
   snippet: ChannelSnippet;
   statistics: ChannelStatistics;
   videos: Array<Video>;
@@ -55,22 +55,17 @@ export type ChannelSnippet = {
   description: Scalars['String']['output'];
   id: Scalars['ID']['output'];
   keywords: Array<Scalars['String']['output']>;
-  thumbnails: ThumbnailGroup;
+  thumbnailUrl: Scalars['String']['output'];
   title: Scalars['String']['output'];
 };
 
 export type ChannelStatistics = {
   __typename?: 'ChannelStatistics';
   id: Scalars['ID']['output'];
-  subscriberCount: Scalars['String']['output'];
-  videoCount: Scalars['String']['output'];
-  viewCount: Scalars['String']['output'];
+  subscriberCount: Scalars['Int']['output'];
+  videoCount: Scalars['Int']['output'];
+  viewCount: Scalars['Int']['output'];
 };
-
-export enum Platform {
-  FusionFlix = 'FusionFlix',
-  YouTube = 'YouTube'
-}
 
 export type Query = {
   __typename?: 'Query';
@@ -91,34 +86,17 @@ export enum SortOrder {
   Desc = 'desc'
 }
 
-export type Thumbnail = {
-  __typename?: 'Thumbnail';
-  height: Scalars['Int']['output'];
-  id: Scalars['ID']['output'];
-  url: Scalars['String']['output'];
-  width: Scalars['Int']['output'];
-};
-
-export type ThumbnailGroup = {
-  __typename?: 'ThumbnailGroup';
-  high?: Maybe<Thumbnail>;
-  id: Scalars['ID']['output'];
-  low: Thumbnail;
-  medium?: Maybe<Thumbnail>;
-};
-
 export type Video = {
   __typename?: 'Video';
   contentDetails: VideoContentDetails;
   id: Scalars['ID']['output'];
-  platform: Platform;
   snippet: VideoSnippet;
   statistics: VideoStatistics;
 };
 
 export type VideoContentDetails = {
   __typename?: 'VideoContentDetails';
-  duration: Scalars['String']['output'];
+  duration: Scalars['Int']['output'];
   hasCaption: Scalars['Boolean']['output'];
   id: Scalars['ID']['output'];
 };
@@ -129,10 +107,12 @@ export type VideoSnippet = {
   channel: Channel;
   description: Scalars['String']['output'];
   id: Scalars['ID']['output'];
-  publishedAt: Scalars['String']['output'];
+  publishedAt: Scalars['DateTime']['output'];
   tags: Array<Scalars['String']['output']>;
-  thumbnails: ThumbnailGroup;
+  thumbnailUrl: Scalars['String']['output'];
   title: Scalars['String']['output'];
+  updatedAt: Scalars['DateTime']['output'];
+  url: Scalars['String']['output'];
 };
 
 export type VideoSortByInput = {
@@ -142,32 +122,11 @@ export type VideoSortByInput = {
 
 export type VideoStatistics = {
   __typename?: 'VideoStatistics';
-  commentCount: Scalars['String']['output'];
+  commentCount: Scalars['Int']['output'];
   id: Scalars['ID']['output'];
-  likeCount: Scalars['String']['output'];
-  viewCount: Scalars['String']['output'];
+  likeCount: Scalars['Int']['output'];
+  viewCount: Scalars['Int']['output'];
 };
-
-export type ThumbnailItemFragment = { __typename?: 'Thumbnail', id: string, url: string, width: number, height: number } & { ' $fragmentName'?: 'ThumbnailItemFragment' };
-
-export type ThumbnailGroupItemFragment = { __typename?: 'ThumbnailGroup', id: string, low: (
-    { __typename?: 'Thumbnail' }
-    & { ' $fragmentRefs'?: { 'ThumbnailItemFragment': ThumbnailItemFragment } }
-  ), medium?: (
-    { __typename?: 'Thumbnail' }
-    & { ' $fragmentRefs'?: { 'ThumbnailItemFragment': ThumbnailItemFragment } }
-  ) | null, high?: (
-    { __typename?: 'Thumbnail' }
-    & { ' $fragmentRefs'?: { 'ThumbnailItemFragment': ThumbnailItemFragment } }
-  ) | null } & { ' $fragmentName'?: 'ThumbnailGroupItemFragment' };
-
-export type VideoItemFragment = { __typename?: 'Video', id: string, snippet: { __typename?: 'VideoSnippet', id: string, title: string, description: string, publishedAt: string, thumbnails: (
-      { __typename?: 'ThumbnailGroup' }
-      & { ' $fragmentRefs'?: { 'ThumbnailGroupItemFragment': ThumbnailGroupItemFragment } }
-    ), channel: { __typename?: 'Channel', id: string, snippet: { __typename?: 'ChannelSnippet', title: string, thumbnails: (
-          { __typename?: 'ThumbnailGroup' }
-          & { ' $fragmentRefs'?: { 'ThumbnailGroupItemFragment': ThumbnailGroupItemFragment } }
-        ) } } }, contentDetails: { __typename?: 'VideoContentDetails', id: string, duration: string, hasCaption: boolean }, statistics: { __typename?: 'VideoStatistics', viewCount: string, likeCount: string, commentCount: string } } & { ' $fragmentName'?: 'VideoItemFragment' };
 
 export type FeedQueryVariables = Exact<{
   skip?: InputMaybe<Scalars['Int']['input']>;
@@ -175,12 +134,7 @@ export type FeedQueryVariables = Exact<{
 }>;
 
 
-export type FeedQuery = { __typename?: 'Query', videos: Array<(
-    { __typename?: 'Video' }
-    & { ' $fragmentRefs'?: { 'VideoItemFragment': VideoItemFragment } }
-  )> };
+export type FeedQuery = { __typename?: 'Query', videos: Array<{ __typename?: 'Video', id: string, snippet: { __typename?: 'VideoSnippet', id: string, title: string, description: string, publishedAt: any, thumbnailUrl: string, channel: { __typename?: 'Channel', id: string, snippet: { __typename?: 'ChannelSnippet', title: string, thumbnailUrl: string } } }, contentDetails: { __typename?: 'VideoContentDetails', id: string, duration: number, hasCaption: boolean }, statistics: { __typename?: 'VideoStatistics', viewCount: number, likeCount: number, commentCount: number } }> };
 
-export const ThumbnailItemFragmentDoc = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"ThumbnailItem"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Thumbnail"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"url"}},{"kind":"Field","name":{"kind":"Name","value":"width"}},{"kind":"Field","name":{"kind":"Name","value":"height"}}]}}]} as unknown as DocumentNode<ThumbnailItemFragment, unknown>;
-export const ThumbnailGroupItemFragmentDoc = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"ThumbnailGroupItem"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"ThumbnailGroup"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"low"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"ThumbnailItem"}}]}},{"kind":"Field","name":{"kind":"Name","value":"medium"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"ThumbnailItem"}}]}},{"kind":"Field","name":{"kind":"Name","value":"high"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"ThumbnailItem"}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"ThumbnailItem"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Thumbnail"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"url"}},{"kind":"Field","name":{"kind":"Name","value":"width"}},{"kind":"Field","name":{"kind":"Name","value":"height"}}]}}]} as unknown as DocumentNode<ThumbnailGroupItemFragment, unknown>;
-export const VideoItemFragmentDoc = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"VideoItem"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Video"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"snippet"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"publishedAt"}},{"kind":"Field","name":{"kind":"Name","value":"thumbnails"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"ThumbnailGroupItem"}}]}},{"kind":"Field","name":{"kind":"Name","value":"channel"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"snippet"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"thumbnails"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"ThumbnailGroupItem"}}]}}]}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"contentDetails"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"duration"}},{"kind":"Field","name":{"kind":"Name","value":"hasCaption"}}]}},{"kind":"Field","name":{"kind":"Name","value":"statistics"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"viewCount"}},{"kind":"Field","name":{"kind":"Name","value":"likeCount"}},{"kind":"Field","name":{"kind":"Name","value":"commentCount"}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"ThumbnailItem"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Thumbnail"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"url"}},{"kind":"Field","name":{"kind":"Name","value":"width"}},{"kind":"Field","name":{"kind":"Name","value":"height"}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"ThumbnailGroupItem"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"ThumbnailGroup"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"low"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"ThumbnailItem"}}]}},{"kind":"Field","name":{"kind":"Name","value":"medium"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"ThumbnailItem"}}]}},{"kind":"Field","name":{"kind":"Name","value":"high"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"ThumbnailItem"}}]}}]}}]} as unknown as DocumentNode<VideoItemFragment, unknown>;
-export const FeedDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"Feed"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"skip"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"filter"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"videos"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"filter"},"value":{"kind":"Variable","name":{"kind":"Name","value":"filter"}}},{"kind":"Argument","name":{"kind":"Name","value":"skip"},"value":{"kind":"Variable","name":{"kind":"Name","value":"skip"}}},{"kind":"Argument","name":{"kind":"Name","value":"take"},"value":{"kind":"IntValue","value":"25"}},{"kind":"Argument","name":{"kind":"Name","value":"sortBy"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"publishedAt"},"value":{"kind":"EnumValue","value":"desc"}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"VideoItem"}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"ThumbnailItem"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Thumbnail"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"url"}},{"kind":"Field","name":{"kind":"Name","value":"width"}},{"kind":"Field","name":{"kind":"Name","value":"height"}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"ThumbnailGroupItem"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"ThumbnailGroup"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"low"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"ThumbnailItem"}}]}},{"kind":"Field","name":{"kind":"Name","value":"medium"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"ThumbnailItem"}}]}},{"kind":"Field","name":{"kind":"Name","value":"high"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"ThumbnailItem"}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"VideoItem"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Video"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"snippet"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"publishedAt"}},{"kind":"Field","name":{"kind":"Name","value":"thumbnails"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"ThumbnailGroupItem"}}]}},{"kind":"Field","name":{"kind":"Name","value":"channel"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"snippet"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"thumbnails"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"ThumbnailGroupItem"}}]}}]}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"contentDetails"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"duration"}},{"kind":"Field","name":{"kind":"Name","value":"hasCaption"}}]}},{"kind":"Field","name":{"kind":"Name","value":"statistics"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"viewCount"}},{"kind":"Field","name":{"kind":"Name","value":"likeCount"}},{"kind":"Field","name":{"kind":"Name","value":"commentCount"}}]}}]}}]} as unknown as DocumentNode<FeedQuery, FeedQueryVariables>;
+
+export const FeedDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"Feed"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"skip"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"filter"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"videos"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"filter"},"value":{"kind":"Variable","name":{"kind":"Name","value":"filter"}}},{"kind":"Argument","name":{"kind":"Name","value":"skip"},"value":{"kind":"Variable","name":{"kind":"Name","value":"skip"}}},{"kind":"Argument","name":{"kind":"Name","value":"take"},"value":{"kind":"IntValue","value":"25"}},{"kind":"Argument","name":{"kind":"Name","value":"sortBy"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"publishedAt"},"value":{"kind":"EnumValue","value":"desc"}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"snippet"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"publishedAt"}},{"kind":"Field","name":{"kind":"Name","value":"thumbnailUrl"}},{"kind":"Field","name":{"kind":"Name","value":"channel"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"snippet"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"thumbnailUrl"}}]}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"contentDetails"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"duration"}},{"kind":"Field","name":{"kind":"Name","value":"hasCaption"}}]}},{"kind":"Field","name":{"kind":"Name","value":"statistics"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"viewCount"}},{"kind":"Field","name":{"kind":"Name","value":"likeCount"}},{"kind":"Field","name":{"kind":"Name","value":"commentCount"}}]}}]}}]}}]} as unknown as DocumentNode<FeedQuery, FeedQueryVariables>;

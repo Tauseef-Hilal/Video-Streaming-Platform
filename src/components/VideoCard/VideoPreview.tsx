@@ -1,38 +1,25 @@
 import { BsBroadcast } from "react-icons/bs";
 
-import {
-  ThumbnailGroupItemFragmentDoc,
-  ThumbnailItemFragmentDoc,
-} from "@/lib/graphql/client/generated/graphql";
-import { FragmentType, useFragment } from "@/lib/graphql/client/generated";
 import { getFormattedDuration } from "@/lib/utils/abc";
 import LazyImage from "../LazyImage";
 
 interface VideoPreviewProps {
-  thumbnailGroupFragment: FragmentType<typeof ThumbnailGroupItemFragmentDoc>;
-  duration: string;
+  thumbnailUrl: string;
+  duration: number;
 }
 
 const VideoPreview: React.FC<VideoPreviewProps> = ({
-  thumbnailGroupFragment,
+  thumbnailUrl,
   duration,
 }) => {
   const durationStr = getFormattedDuration(duration);
-  const thumbnails = useFragment(
-    ThumbnailGroupItemFragmentDoc,
-    thumbnailGroupFragment
-  );
-  const thumbnail = useFragment(
-    ThumbnailItemFragmentDoc,
-    thumbnails.high ?? thumbnails.medium ?? thumbnails.low
-  );
-
+  
   return (
     <div className="relative w-full overflow-hidden">
       <LazyImage
-        src={thumbnail.url}
-        width={thumbnail.width}
-        height={thumbnail.height}
+        src={thumbnailUrl}
+        width={1920}
+        height={1080}
         className="rounded-xl w-full object-cover aspect-video"
         alt="Video Thumbnail"
       />

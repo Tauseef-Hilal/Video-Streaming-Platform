@@ -5,6 +5,30 @@ query Feed($skip: Int, $filter: String) {
     take: 25
     sortBy: { publishedAt: desc }
   ) {
-    ...VideoItem
+    id
+    snippet {
+      id
+      title
+      description
+      publishedAt
+      thumbnailUrl
+      channel {
+        id
+        snippet {
+          title
+          thumbnailUrl
+        }
+      }
+    }
+    contentDetails {
+      id
+      duration
+      hasCaption
+    }
+    statistics {
+      viewCount
+      likeCount
+      commentCount
+    }
   }
 }

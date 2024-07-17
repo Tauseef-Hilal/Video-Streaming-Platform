@@ -1,18 +1,13 @@
 import { usePathname } from "next/navigation";
 import { FiMoreVertical } from "react-icons/fi";
 
-import {
-  ThumbnailGroupItemFragmentDoc,
-  ThumbnailItemFragmentDoc,
-  VideoItemFragment,
-} from "@/lib/graphql/client/generated/graphql";
 import LazyImage from "../LazyImage";
-import { useFragment } from "@/lib/graphql/client/generated";
+import { FeedQuery } from "@/lib/graphql/client/generated/graphql";
 import { getFormattedDifference, getFormattedViewCount } from "@/lib/utils/abc";
 
 interface VideoDetailsProps {
-  videoSnippet: VideoItemFragment["snippet"];
-  videoStats: VideoItemFragment["statistics"];
+  videoSnippet: FeedQuery["videos"][0]["snippet"];
+  videoStats: FeedQuery["videos"][0]["statistics"];
   showMoreBtn: boolean;
 }
 
@@ -23,11 +18,6 @@ const VideoDetails: React.FC<VideoDetailsProps> = ({
 }) => {
   const timeSinceUpload = getFormattedDifference(videoSnippet.publishedAt);
   const viewCount = getFormattedViewCount(videoStats.viewCount);
-  const thumbnails = useFragment(
-    ThumbnailGroupItemFragmentDoc,
-    videoSnippet.channel.snippet.thumbnails
-  );
-  const thumbnail = useFragment(ThumbnailItemFragmentDoc, thumbnails.low);
   const onResultsPage = usePathname().endsWith("/results");
 
   return (
@@ -35,7 +25,7 @@ const VideoDetails: React.FC<VideoDetailsProps> = ({
       <div className="flex gap-3 justify-start items-start">
         {!onResultsPage && (
           <LazyImage
-            src={thumbnail.url}
+            src={videoSnippet.channel.snippet.thumbnailUrl}
             alt="Channel Thumbnail"
             className="rounded-full flex-shrink-0"
             width={40}
@@ -53,7 +43,7 @@ const VideoDetails: React.FC<VideoDetailsProps> = ({
               </p>
               <div className="flex items-center gap-2 my-2">
                 <LazyImage
-                  src={thumbnail.url}
+                  src={videoSnippet.channel.snippet.thumbnailUrl}
                   alt="Channel Thumbnail"
                   className="rounded-full flex-shrink-0"
                   width={24}

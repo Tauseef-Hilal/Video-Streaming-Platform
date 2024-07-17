@@ -1,12 +1,13 @@
 type VideoSnippet = {
   id: string;
+  url: string;
   title: string;
   description: string;
   channelId: string;
-  categoryId: string;
-  publishedAt: string;
+  categoryId: number;
+  publishedAt: Date;
   tags: string[];
-  thumbnailGroupId: string;
+  thumbnailUrl: string;
 };
 
 export default VideoSnippet;

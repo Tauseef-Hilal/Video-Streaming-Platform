@@ -4,11 +4,12 @@ import { ChannelResolvers as ResolverTypes } from "../generated/types";
 const ChannelResolvers: ResolverTypes = {
   snippet: (channel) => ({
     id: `${channel.id}#Snippet`,
+    url: channel.url,
     title: channel.title,
     description: channel.description,
     country: channel.country,
     keywords: channel.keywords,
-    thumbnailGroupId: channel.thumbnailGroupId,
+    thumbnailUrl: channel.thumbnailUrl,
   }),
   statistics: (channel) => ({
     id: `${channel.id}#Statistics`,

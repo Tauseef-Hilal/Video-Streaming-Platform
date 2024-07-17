@@ -1,6 +1,6 @@
 {
-  "name": "fusion_flix",
-  "version": "0.1.0",
+  "name": "video_streaming_platform",
+  "version": "0.2.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
@@ -16,10 +16,10 @@
     "@apollo/client": "^3.9.5",
     "@apollo/server": "^4.10.0",
     "@as-integrations/next": "^3.0.0",
-    "@prisma/client": "^5.10.1",
+    "@prisma/client": "^5.17.0",
     "graphql": "^16.8.1",
     "graphql-tools": "^9.0.0",
-    "next": "14.1.0",
+    "next": "^14.2.5",
     "react": "^18",
     "react-dom": "^18",
     "react-icons": "^5.0.1"
@@ -36,7 +36,7 @@
     "eslint": "^8",
     "eslint-config-next": "14.1.0",
     "postcss": "^8",
-    "prisma": "^5.10.1",
+    "prisma": "^5.17.0",
     "tailwindcss": "^3.3.0",
     "typescript": "^5.3.3"
   }

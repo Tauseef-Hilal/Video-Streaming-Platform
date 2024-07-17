@@ -1,10 +1,11 @@
 type ChannelSnippet = {
   id: string;
+  url: string;
   title: string;
   description: string;
   country: string;
   keywords: string[];
-  thumbnailGroupId: string;
+  thumbnailUrl: string;
 };
 
 export default ChannelSnippet;
