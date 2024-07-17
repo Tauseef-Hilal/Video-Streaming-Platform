@@ -140,4 +140,4 @@ Open your browser and navigate to `http://localhost:3000`.
 
 If you have any questions, issues, or suggestions, please [open an issue](https://github.com/your-username/video-streaming-platform/issues) on GitHub or contact us directly.
 
-Thank you for contributing to this project and helping to make it better for everyone! For any questions or inquiries, please contact [Tauseef Tantary](tantary.tauseef.atwork@gmail.com).
+Thank you for contributing to this project and helping to make it better for everyone! For any questions or inquiries, please contact [Tauseef Tantary](mailto:tantary.tauseef.atwork@gmail.com).
