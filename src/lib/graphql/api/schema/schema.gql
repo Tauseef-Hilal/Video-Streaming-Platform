@@ -11,8 +11,9 @@ type Query {
 }
 
 type Mutation {
-  register(email: String!, password: String!, name: String!): AuthPayload
   login(email: String!, password: String!): AuthPayload
+  passwordReset(email: String!, password: String!): AuthPayload
+  register(email: String!, password: String!, name: String!): AuthPayload
 }
 
 type AuthPayload {

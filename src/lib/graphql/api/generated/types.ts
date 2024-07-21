@@ -79,11 +79,18 @@ export type ChannelStatistics = {
 export type Mutation = {
   __typename?: 'Mutation';
   login?: Maybe<AuthPayload>;
+  passwordReset?: Maybe<AuthPayload>;
   register?: Maybe<AuthPayload>;
 };
 
 
 export type MutationLoginArgs = {
+  email: Scalars['String']['input'];
+  password: Scalars['String']['input'];
+};
+
+
+export type MutationPasswordResetArgs = {
   email: Scalars['String']['input'];
   password: Scalars['String']['input'];
 };
@@ -327,6 +334,7 @@ export interface DateTimeScalarConfig extends GraphQLScalarTypeConfig<ResolversT
 
 export type MutationResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
   login?: Resolver<Maybe<ResolversTypes['AuthPayload']>, ParentType, ContextType, RequireFields<MutationLoginArgs, 'email' | 'password'>>;
+  passwordReset?: Resolver<Maybe<ResolversTypes['AuthPayload']>, ParentType, ContextType, RequireFields<MutationPasswordResetArgs, 'email' | 'password'>>;
   register?: Resolver<Maybe<ResolversTypes['AuthPayload']>, ParentType, ContextType, RequireFields<MutationRegisterArgs, 'email' | 'name' | 'password'>>;
 };
 

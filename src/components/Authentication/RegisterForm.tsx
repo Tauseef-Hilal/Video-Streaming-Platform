@@ -5,12 +5,9 @@ import { IoIosCloseCircleOutline } from "react-icons/io";
 import { useMutation } from "@apollo/client";
 
 import useAuth from "@/hooks/auth";
-import FloatingLabelInput from "./FloatingLabelInput";
-import LoadingIndicator from "./LoadingIndicator";
+import FloatingLabelInput from "../FloatingLabelInput";
+import LoadingIndicator from "../LoadingIndicator";
 import {
-  LoginDocument,
-  LoginMutation,
-  LoginMutationVariables,
   RegisterDocument,
   RegisterMutation,
   RegisterMutationVariables,
@@ -18,6 +15,7 @@ import {
 
 interface LoginFormProps {
   onComplete: () => void;
+  onFormChangeRequest: (form: "login") => void;
 }
 
 interface FormError {
@@ -27,12 +25,14 @@ interface FormError {
   authError?: string;
 }
 
-const LoginForm: React.FC<LoginFormProps> = ({ onComplete }) => {
+const RegisterForm: React.FC<LoginFormProps> = ({
+  onComplete,
+  onFormChangeRequest,
+}) => {
   const { login } = useAuth();
   const [errors, setErrors] = useState<FormError>({});
   const [formState, setFormState] = useState({
     isSubmiting: false,
-    login: true,
     email: "",
     password: "",
     name: "",
@@ -64,27 +64,6 @@ const LoginForm: React.FC<LoginFormProps> = ({ onComplete }) => {
       setFormState({ ...formState, isSubmiting: false });
     },
   });
-
-  const [gqlLogin] = useMutation<LoginMutation, LoginMutationVariables>(
-    LoginDocument,
-    {
-      variables: {
-        email: formState.email,
-        password: formState.password,
-      },
-      onCompleted: ({ login }) => {
-        setFormState({ ...formState, isSubmiting: false });
-        setTimeout(() => {
-          if (!login?.token) return;
-          setTokenAndCloseModal(login.token);
-        }, 1000);
-      },
-      onError: (error) => {
-        setErrors({ ...errors, authError: error.message });
-        setFormState({ ...formState, isSubmiting: false });
-      },
-    }
-  );
 
   const validateName = () => {
     if (!formState.name) {
@@ -122,20 +101,12 @@ const LoginForm: React.FC<LoginFormProps> = ({ onComplete }) => {
   };
 
   const handleSubmit = () => {
-    if (
-      errors.emailError ||
-      errors.passwordError ||
-      (!formState.login && errors.nameError)
-    ) {
+    if (errors.emailError || errors.passwordError || errors.nameError) {
       return;
     }
 
+    gqlRegister();
     setFormState({ ...formState, isSubmiting: true });
-    if (formState.login) {
-      gqlLogin();
-    } else {
-      gqlRegister();
-    }
   };
 
   const inputFieldClassName = `
@@ -158,7 +129,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ onComplete }) => {
     >
       <div className="flex justify-between items-start w-full">
         <h2 className={`text-2xl font-bold mb-2 text-start w-full`}>
-          {formState.login ? "Sign In" : "Create an account"}
+          Create an account
         </h2>
         <button className="text-red-500" onClick={onComplete}>
           <IoIosCloseCircleOutline size={28} />
@@ -167,40 +138,38 @@ const LoginForm: React.FC<LoginFormProps> = ({ onComplete }) => {
 
       <div className="flex flex-col gap-4 w-72">
         {/* Name */}
-        {!formState.login && (
-          <div className="flex flex-col gap-2">
-            <FloatingLabelInput
-              required
-              id="nameInput"
-              name="name"
-              label="Name"
-              value={formState.name}
-              ariaDescribedBy="nameError"
-              onBlur={validateName}
-              onChange={(e) =>
-                setFormState({
-                  ...formState,
-                  name: e.target.value,
-                })
-              }
-              className={`
+        <div className="flex flex-col gap-2">
+          <FloatingLabelInput
+            required
+            id="nameInput"
+            name="name"
+            label="Name"
+            value={formState.name}
+            ariaDescribedBy="nameError"
+            onBlur={validateName}
+            onChange={(e) =>
+              setFormState({
+                ...formState,
+                name: e.target.value,
+              })
+            }
+            className={`
                 ${inputFieldClassName} 
                 ${errors.nameError ? "border-red-600" : ""}
               `}
-            />
-            {errors.nameError && (
-              <p
-                id="nameError"
-                aria-atomic={true}
-                aria-live="polite"
-                className="text-red-600 text-sm flex gap-2 items-center"
-              >
-                <IoIosCloseCircleOutline size={24} />
-                {errors.nameError}
-              </p>
-            )}
-          </div>
-        )}
+          />
+          {errors.nameError && (
+            <p
+              id="nameError"
+              aria-atomic={true}
+              aria-live="polite"
+              className="text-red-600 text-sm flex gap-2 items-center"
+            >
+              <IoIosCloseCircleOutline size={24} />
+              {errors.nameError}
+            </p>
+          )}
+        </div>
 
         {/* Email */}
         <div className="flex flex-col gap-2">
@@ -285,7 +254,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ onComplete }) => {
           {formState.isSubmiting && (
             <LoadingIndicator icon={CgSpinner} iconClassName="text-xl" />
           )}
-          {formState.login ? "Sign In" : "Sign Up"}
+          Sign Up
         </button>
         {errors.authError && (
           <p
@@ -297,31 +266,16 @@ const LoginForm: React.FC<LoginFormProps> = ({ onComplete }) => {
             {errors.authError}
           </p>
         )}
-        <button className="w-full pointer rounded-md text-neutral-300 text-sm">
-          Forgot password?
-        </button>
       </div>
 
       <div className="text-sm">
-        <span className="text-neutral-300 mr-2">
-          {formState.login
-            ? "Don't have an account?"
-            : "Already have an account?"}
-        </span>
-        <button
-          type="button"
-          onClick={() =>
-            setFormState({
-              ...formState,
-              login: !formState.login,
-            })
-          }
-        >
-          {formState.login ? "Sign up now" : "Sign in now"}
+        <span className="text-neutral-300 mr-2">Already have an account?</span>
+        <button type="button" onClick={() => onFormChangeRequest("login")}>
+          Sign in now
         </button>
       </div>
     </form>
   );
 };
 
-export default LoginForm;
+export default RegisterForm;

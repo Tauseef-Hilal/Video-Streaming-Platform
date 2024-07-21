@@ -40,6 +40,24 @@ const MutationResolvers: ResolverTypes = {
       user,
     };
   },
+  passwordReset: async (_parent, args, context) => {
+    const { prisma } = context;
+    const { email, password } = args;
+
+    const user = await prisma.user.findUnique({ where: { email } });
+    if (!user) throw new Error("No user with such email");
+
+    const hashedPassword = await hashPassword(password);
+    await prisma.user.update({
+      where: { email },
+      data: { password: hashedPassword },
+    });
+
+    return {
+      token: generateToken(user.id),
+      user,
+    };
+  },
 };
 
 export default MutationResolvers;

@@ -2,7 +2,7 @@ import { useState } from "react";
 import { HiOutlineUserCircle } from "react-icons/hi2";
 
 import Modal from "./Modal";
-import LoginForm from "./LoginForm";
+import Authenticate from "./Authentication/Authenticate";
 
 interface SignInButtonProps {
   className?: string;
@@ -31,7 +31,7 @@ const SignInButton: React.FC<SignInButtonProps> = ({ className }) => {
         onClose={() => setIsModalOpen(false)}
         className={`bg-[#13121255]`}
       >
-        <LoginForm onComplete={() => setIsModalOpen(false)} />
+        <Authenticate onComplete={() => setIsModalOpen(false)} />
       </Modal>
     </div>
   );

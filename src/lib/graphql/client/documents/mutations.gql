@@ -9,3 +9,9 @@ mutation Login($email: String!, $password: String!) {
     token
   }
 }
+
+mutation PasswordReset($email: String!, $password: String!) {
+  passwordReset(email: $email, password: $password) {
+    token
+  }
+}
