@@ -9,6 +9,7 @@ import VideoSnippetResolvers from "../resolvers/VideoSnippet";
 import ChannelResolvers from "../resolvers/Channel";
 import CategoryResolvers from "../resolvers/Category";
 import DateTimeResolver from "../resolvers/DateTime";
+import MutationResolvers from "../resolvers/Mutation";
 
 const typeDefs = readFileSync(
   path.resolve("src/lib/graphql/api/schema/schema.gql"),
@@ -17,6 +18,7 @@ const typeDefs = readFileSync(
 
 const resolvers: Resolvers = {
   Query: QueryResolvers,
+  Mutation: MutationResolvers,
   Video: VideoResolvers,
   VideoSnippet: VideoSnippetResolvers,
   Category: CategoryResolvers,

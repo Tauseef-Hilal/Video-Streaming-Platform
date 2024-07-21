@@ -8,7 +8,7 @@ import AppDrawer from "../AppDrawer";
 import IconButton from "../IconButton";
 import MiniSidebar from "./MiniSidebar";
 import FullSidebar from "./FullSidebar";
-import { useViewportWidth } from "@/hooks/viewport";
+import useViewportWidth  from "@/hooks/viewport";
 import { areOnSameSideOfReference, disableBodyScroll } from "@/lib/utils/abc";
 
 // Used for switching between sidebars on large screens (vw >= BREAKPOINT)

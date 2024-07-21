@@ -83,27 +83,3 @@ export function disableBodyScroll() {
   document.body.classList.add("scroll-border");
   document.getElementById("header")!.classList.add("scroll-border");
 }
-
-export function replaceLinksAndHashtags(description: string): string {
-  // Regular expressions to match links and hashtags
-  const linkRegex = /(?:https?|ftp):\/\/[\n\S]+/gi; // Matches URLs starting with http://, https://, or ftp://
-  const hashtagRegex = /#[^\s#]+/gi; // Matches hashtags starting with #
-
-  // Replace links with anchor tags
-  const descriptionWithLinksReplaced = description.replace(
-    linkRegex,
-    (match) => {
-      return `<a class="link" href="${match}" target="_blank">${match}</a>`;
-    }
-  );
-
-  // Replace hashtags with anchor tags
-  const descriptionWithHashtagsReplaced = descriptionWithLinksReplaced.replace(
-    hashtagRegex,
-    (match) => {
-      return `<a class="link" href="/hashtags/${match}" target="_blank">${match}</a>`;
-    }
-  );
-
-  return descriptionWithHashtagsReplaced;
-}

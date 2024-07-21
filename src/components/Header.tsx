@@ -1,22 +1,27 @@
 "use client";
 
 import { useState } from "react";
-import { BiArrowBack, BiMicrophone, BiSearch } from "react-icons/bi";
+import { useRouter, useSearchParams } from "next/navigation";
+import { BiArrowBack } from "react-icons/bi";
+import { RxAvatar } from "react-icons/rx";
+import { FiMoreVertical } from "react-icons/fi";
+import { IoMdMic, IoMdNotificationsOutline, IoMdSearch } from "react-icons/io";
 
 import Logo from "./Logo";
 import Search from "./Search";
 import IconButton from "./IconButton";
 import SignInButton from "./SignInButton";
-import { useViewportWidth } from "@/hooks/viewport";
-import { areOnSameSideOfReference } from "@/lib/utils/abc";
-import { FiMoreVertical } from "react-icons/fi";
+import useViewportWidth from "@/hooks/viewport";
+import useAuth from "@/hooks/auth";
 import { SCROLLBAR_WIDTH } from "@/lib/constants";
-import { useRouter, useSearchParams } from "next/navigation";
+import { areOnSameSideOfReference } from "@/lib/utils/abc";
+import { IoVideocamOutline } from "react-icons/io5";
 
 // Used to decide whether search bar covers whole header
 const SEARCH_BREAKPOINT = 768 + SCROLLBAR_WIDTH;
 
 const Header: React.FC = () => {
+  const { isLoggedIn } = useAuth();
   const [searchFocussed, setSearchFocussed] = useState(false);
   const [showWideSearchBar, setShowWideSearchBar] = useState(false);
 
@@ -94,14 +99,14 @@ const Header: React.FC = () => {
             />
             <IconButton
               className="sm:block"
-              icon={BiMicrophone}
+              icon={IoMdMic}
               size={24}
               tip="Voice"
             />
           </>
         ) : (
           <>
-            <Logo className="ml-10" />
+            <Logo className="ml-5 scale-90 sm:ml-10 sm:scale-100" />
 
             {/* Search Bar & Mic (md and above) */}
             <div
@@ -121,37 +126,51 @@ const Header: React.FC = () => {
               />
               <IconButton
                 className={`bg-neutral-800 hover:bg-neutral-700`}
-                icon={BiMicrophone}
+                icon={IoMdMic}
                 size={24}
                 tip="Voice"
               />
             </div>
 
-            {/* TODO: Conditional rendering based on user auth */}
-            <div className="flex items-center">
+            <div className="flex items-center gap-1">
               <div className="flex items-center">
                 <IconButton
                   onClick={toggleShowWideSearchBar}
                   className="md:hidden"
-                  icon={BiSearch}
+                  icon={IoMdSearch}
                   size={24}
                   tip="Search"
                 />
                 <IconButton
                   className="hidden sm:block md:hidden"
-                  icon={BiMicrophone}
+                  icon={IoMdMic}
                   size={24}
                   tip="Voice"
                 />
               </div>
+              {isLoggedIn && (
+                <div className="flex items-center">
+                  <IconButton
+                    onClick={toggleShowWideSearchBar}
+                    icon={IoVideocamOutline}
+                    size={24}
+                    tip="Upload"
+                  />
+                  <IconButton
+                    icon={IoMdNotificationsOutline}
+                    size={24}
+                    tip="Notifications"
+                  />
+                </div>
+              )}
               <div className="flex items-center">
                 <IconButton
                   className="hover:bg-transparent px-0 py-0"
-                  icon={FiMoreVertical}
+                  icon={isLoggedIn ? RxAvatar : FiMoreVertical}
                   size={24}
                   tip="Settings"
                 />
-                <SignInButton className="text-sm w-max" />
+                {!isLoggedIn && <SignInButton className="text-sm w-max" />}
               </div>
             </div>
           </>

@@ -1,15 +1,30 @@
 import { NextRequest } from "next/server";
 import { ApolloServer } from "@apollo/server";
 import { startServerAndCreateNextHandler } from "@as-integrations/next";
+import { headers } from "next/headers";
+import { JwtPayload } from "jsonwebtoken";
 
 import schema from "@/lib/graphql/api/schema/schema";
 import prismaClient from "@/lib/prisma";
+import { verifyTokenAndGetPayload } from "@/lib/utils/auth";
 
 const server = new ApolloServer({ schema });
 const handler = startServerAndCreateNextHandler(server, {
-  context: async () => ({
-    prisma: prismaClient,
-  }),
+  context: async () => {
+    const authHeader = (headers().get("authorization") || "");
+    const token = authHeader.replace("Bearer ", "");
+
+    if (token) {
+      const payload = verifyTokenAndGetPayload(token) as JwtPayload;
+
+      return {
+        prisma: prismaClient,
+        userId: payload.userId,
+      };
+    }
+
+    return { prisma: prismaClient };
+  },
 });
 
 export async function GET(request: NextRequest) {

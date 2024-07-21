@@ -4,7 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 import { SidebarLink } from "./data";
-import SignInButton from "../SignInButton";
+import Subscriptions from "../Subscriptions";
 
 interface SidebarSectionProps {
   links: SidebarLink[] | null;
@@ -13,25 +13,9 @@ interface SidebarSectionProps {
 const SidebarSection: React.FC<SidebarSectionProps> = ({ links }) => {
   const pathname = usePathname(); // To find active link
 
+  // Show subscriptions if user is signed in
   if (links == null) {
-    // TODO: Show subscriptions if user is signed in
-
-    // Otherwise render this
-    return (
-      <div
-        className={`
-          flex flex-col gap-3 items-start px-7 py-5 border-b-[1px] 
-          border-[#4c4c4cb4]
-        `}
-      >
-        <p className="text-sm">
-          Sign in to like videos,
-          <br />
-          comment, and subscribe
-        </p>
-        <SignInButton />
-      </div>
-    );
+    return <Subscriptions />;
   }
 
   return (

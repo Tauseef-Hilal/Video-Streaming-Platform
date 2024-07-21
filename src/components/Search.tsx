@@ -1,8 +1,8 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { BiSearch } from "react-icons/bi";
 import { RxCross1 } from "react-icons/rx";
+import { IoMdSearch } from "react-icons/io";
 
 import IconButton from "./IconButton";
 
@@ -41,7 +41,7 @@ const Search: React.FC<SearchProps> = ({
 
   return (
     <div className={`flex h-full w-full ${className}`}>
-      {!focused && <BiSearch className="ml-4 text-transparent text-xl" />}
+      {!focused && <IoMdSearch className="ml-4 text-transparent text-xl" />}
       <div
         className={`
           flex items-center relative rounded-l-full border border-neutral-700 
@@ -49,7 +49,7 @@ const Search: React.FC<SearchProps> = ({
       `}
       >
         {focused && (
-          <BiSearch
+          <IoMdSearch
             className={`
               absolute -z-10 left-4 text-neutral-300 text-xl
             `}
@@ -90,7 +90,7 @@ const Search: React.FC<SearchProps> = ({
           bg-neutral-800 hover:bg-neutral-800 rounded-full rounded-l-none 
           border border-l-0 border-neutral-700 px-4 h-full
         `}
-        icon={BiSearch}
+        icon={IoMdSearch}
         size={20}
       />
     </div>

@@ -70,11 +70,7 @@ const ContentFeed: React.FC<ContentFeedProps> = ({
     <div className="flex flex-col gap-5 w-full">
       <div className={className + " w-full"}>
         {videos.map((video, idx) => (
-          <VideoCard
-            key={idx}
-            video={video}
-            className={videoCardClassName}
-          />
+          <VideoCard key={idx} video={video} className={videoCardClassName} />
         ))}
       </div>
 

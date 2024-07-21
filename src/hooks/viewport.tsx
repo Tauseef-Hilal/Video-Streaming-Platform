@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-export const useViewportWidth = (
+const useViewportWidth = (
   shouldUpdate: (storedWidth: number, viewportWidth: number) => boolean
 ) => {
   const [viewportWidth, setViewportWidth] = useState(0);
@@ -22,3 +22,5 @@ export const useViewportWidth = (
 
   return viewportWidth;
 };
+
+export default useViewportWidth;
