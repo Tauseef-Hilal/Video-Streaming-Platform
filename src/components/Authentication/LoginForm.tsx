@@ -12,6 +12,7 @@ import {
   LoginMutation,
   LoginMutationVariables,
 } from "@/lib/graphql/client/generated/graphql";
+import { BiCheckCircle } from "react-icons/bi";
 
 interface LoginFormProps {
   onComplete: () => void;
@@ -24,21 +25,27 @@ interface FormError {
   authError?: string;
 }
 
+interface FormState {
+  status: "idle" | "submiting" | "success";
+  email: string;
+  password: string;
+}
+
 const LoginForm: React.FC<LoginFormProps> = ({
   onComplete,
   onFormChangeRequest,
 }) => {
   const { login } = useAuth();
   const [errors, setErrors] = useState<FormError>({});
-  const [formState, setFormState] = useState({
-    isSubmiting: false,
+  const [formState, setFormState] = useState<FormState>({
+    status: "idle",
     email: "",
     password: "",
   });
 
   const setTokenAndCloseModal = (token: string) => {
     login(token);
-    onComplete();
+    setTimeout(() => onComplete(), 1000);
   };
 
   const [gqlLogin] = useMutation<LoginMutation, LoginMutationVariables>(
@@ -49,7 +56,7 @@ const LoginForm: React.FC<LoginFormProps> = ({
         password: formState.password,
       },
       onCompleted: ({ login }) => {
-        setFormState({ ...formState, isSubmiting: false });
+        setFormState({ ...formState, status: "success" });
         setTimeout(() => {
           if (!login?.token) return;
           setTokenAndCloseModal(login.token);
@@ -57,7 +64,7 @@ const LoginForm: React.FC<LoginFormProps> = ({
       },
       onError: (error) => {
         setErrors({ ...errors, authError: error.message });
-        setFormState({ ...formState, isSubmiting: false });
+        setFormState({ ...formState, status: "idle" });
       },
     }
   );
@@ -89,18 +96,21 @@ const LoginForm: React.FC<LoginFormProps> = ({
   };
 
   const handleSubmit = () => {
-    if (errors.emailError || errors.passwordError) {
+    if (isSubmitBtnDisabled ||errors.emailError || errors.passwordError) {
       return;
     }
 
     gqlLogin();
-    setFormState({ ...formState, isSubmiting: true });
+    setFormState({ ...formState, status: "submiting" });
   };
 
   const inputFieldClassName = `
     border border-neutral-700 bg-black p-2 rounded-md 
     text-neutral-300 outline-none focus:border-neutral-300
   `;
+
+  const isSubmitBtnDisabled =
+    formState.status == "submiting" || formState.status == "success";
 
   return (
     <form
@@ -197,14 +207,17 @@ const LoginForm: React.FC<LoginFormProps> = ({
       <div className="w-full flex flex-col gap-2 items-center">
         <button
           type="submit"
-          disabled={formState.isSubmiting}
+          disabled={isSubmitBtnDisabled}
           className={`
             w-full pointer bg-red-600 rounded-md p-2 hover:bg-red-700 flex 
             gap-2 justify-center items-center disabled:cursor-not-allowed
           `}
         >
-          {formState.isSubmiting && (
+          {formState.status == "submiting" && (
             <LoadingIndicator icon={CgSpinner} iconClassName="text-xl" />
+          )}
+          {formState.status == "success" && (
+            <BiCheckCircle className="text-xl" />
           )}
           Sign In
         </button>

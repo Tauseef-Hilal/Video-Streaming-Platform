@@ -8,14 +8,12 @@ import useAuth from "@/hooks/auth";
 import FloatingLabelInput from "../FloatingLabelInput";
 import LoadingIndicator from "../LoadingIndicator";
 import {
-  LoginDocument,
-  LoginMutation,
-  LoginMutationVariables,
   PasswordResetDocument,
   PasswordResetMutation,
   PasswordResetMutationVariables,
 } from "@/lib/graphql/client/generated/graphql";
 import { sendOtp } from "@/lib/utils/auth";
+import { BiCheckCircle } from "react-icons/bi";
 
 interface PasswordResetFormProps {
   onComplete: () => void;
@@ -29,6 +27,14 @@ interface FormError {
   authError?: string;
 }
 
+interface FormState {
+  status: "idle" | "waiting" | "success";
+  verified: boolean;
+  email: string;
+  otp: string;
+  password: string;
+}
+
 const PasswordResetForm: React.FC<PasswordResetFormProps> = ({
   onComplete,
   onFormChangeRequest,
@@ -36,8 +42,8 @@ const PasswordResetForm: React.FC<PasswordResetFormProps> = ({
   const { login } = useAuth();
   const [otp, setOtp] = useState("");
   const [errors, setErrors] = useState<FormError>({});
-  const [formState, setFormState] = useState({
-    loading: false,
+  const [formState, setFormState] = useState<FormState>({
+    status: "idle",
     verified: false,
     email: "",
     otp: "",
@@ -46,7 +52,7 @@ const PasswordResetForm: React.FC<PasswordResetFormProps> = ({
 
   const setTokenAndCloseModal = (token: string) => {
     login(token);
-    onComplete();
+    setTimeout(() => onComplete(), 1000);
   };
 
   const [resetPassword] = useMutation<
@@ -58,7 +64,7 @@ const PasswordResetForm: React.FC<PasswordResetFormProps> = ({
       password: formState.password,
     },
     onCompleted: ({ passwordReset }) => {
-      setFormState({ ...formState, loading: false });
+      setFormState({ ...formState, status: "success" });
       setTimeout(() => {
         if (!passwordReset?.token) return;
         setTokenAndCloseModal(passwordReset.token);
@@ -66,7 +72,7 @@ const PasswordResetForm: React.FC<PasswordResetFormProps> = ({
     },
     onError: (error) => {
       setErrors({ ...errors, authError: error.message });
-      setFormState({ ...formState, loading: false });
+      setFormState({ ...formState, status: "idle" });
     },
   });
 
@@ -84,18 +90,6 @@ const PasswordResetForm: React.FC<PasswordResetFormProps> = ({
     setErrors({ ...errors, emailError: "" });
   };
 
-  const validateOtp = () => {
-    if (formState.password.length < 8) {
-      setErrors({
-        ...errors,
-        passwordError: "Password length must be 8 or more",
-      });
-      return;
-    }
-
-    setErrors({ ...errors, passwordError: "" });
-  };
-
   const validatePassword = () => {
     if (formState.password.length < 8) {
       setErrors({
@@ -108,34 +102,47 @@ const PasswordResetForm: React.FC<PasswordResetFormProps> = ({
     setErrors({ ...errors, passwordError: "" });
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (isSubmitBtnDisabled || (!formState.email && !otp)) return;
+
+    // For loading indicator
+    setFormState({ ...formState, status: "waiting" });
+
     if (!otp) {
       sendOtp(formState.email).then((res) => {
-        setFormState({ ...formState, loading: false });
-
         if (res.success) {
-          setOtp(res.otp!);
+          setFormState({ ...formState, status: "success" });
           setErrors({ ...errors, authError: "" });
+
+          setTimeout(() => {
+            setFormState({ ...formState, status: "idle" });
+            setOtp(res.otp!);
+          }, 1000);
           return;
         }
 
+        setFormState({ ...formState, status: "idle" });
         setErrors({ ...errors, authError: "Failed to send OTP" });
       });
     } else if (!formState.verified) {
-      setFormState({ ...formState, verified: true, loading: false });
-
       if (formState.otp == otp) {
-        setErrors({ ...errors, authError: "" });
+        setFormState({ ...formState, verified: false, status: "success" });
+        setErrors({ ...errors, otpError: "" });
+
+        setTimeout(
+          () => setFormState({ ...formState, verified: true, status: "idle" }),
+          1000
+        );
         return;
       }
 
-      setErrors({ ...errors, authError: "Invalid OTP" });
+      setFormState({ ...formState, verified: false, status: "idle" });
+      setErrors({ ...errors, otpError: "Invalid OTP" });
     } else {
       if (errors.passwordError) return;
-      resetPassword()
+      resetPassword();
     }
-
-    setFormState({ ...formState, loading: true });
   };
 
   const inputFieldClassName = `
@@ -143,12 +150,15 @@ const PasswordResetForm: React.FC<PasswordResetFormProps> = ({
     text-neutral-300 outline-none focus:border-neutral-300
   `;
 
+  const isSubmitBtnDisabled =
+    formState.status == "waiting" || formState.status == "success";
+
   return (
     <form
-      action={handleSubmit}
+      onSubmit={handleSubmit}
       onKeyDown={(e) => {
         if (e.key == "Enter") {
-          handleSubmit();
+          handleSubmit(e);
         }
       }}
       className={`
@@ -214,7 +224,6 @@ const PasswordResetForm: React.FC<PasswordResetFormProps> = ({
               label="OTP"
               value={formState.otp}
               ariaDescribedBy="otpError"
-              onBlur={validateOtp}
               onChange={(e) =>
                 setFormState({
                   ...formState,
@@ -281,14 +290,17 @@ const PasswordResetForm: React.FC<PasswordResetFormProps> = ({
       <div className="w-full flex flex-col gap-2 items-center">
         <button
           type="submit"
-          disabled={formState.loading}
+          disabled={isSubmitBtnDisabled}
           className={`
             w-full pointer bg-red-600 rounded-md p-2 hover:bg-red-700 flex 
             gap-2 justify-center items-center disabled:cursor-not-allowed
           `}
         >
-          {formState.loading && (
+          {formState.status == "waiting" && (
             <LoadingIndicator icon={CgSpinner} iconClassName="text-xl" />
+          )}
+          {formState.status == "success" && (
+            <BiCheckCircle className="text-xl" />
           )}
           {!otp && "Send OTP"}
           {otp && !formState.verified && "Verifiy OTP"}

@@ -170,7 +170,7 @@ const Header: React.FC = () => {
                   size={24}
                   tip="Settings"
                 />
-                {!isLoggedIn && <SignInButton className="text-sm w-max" />}
+                {isLoggedIn && <SignInButton className="text-sm w-max" />}
               </div>
             </div>
           </>
