@@ -13,10 +13,9 @@ const handler = startServerAndCreateNextHandler(server, {
   context: async () => {
     const authHeader = (headers().get("authorization") || "");
     const token = authHeader.replace("Bearer ", "");
+    const payload = await verifyTokenAndGetPayload(token);
 
-    if (token) {
-      const payload = verifyTokenAndGetPayload(token) as JwtPayload;
-
+    if (payload) {
       return {
         prisma: prismaClient,
         userId: payload.userId,

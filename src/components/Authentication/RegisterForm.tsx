@@ -46,9 +46,16 @@ const RegisterForm: React.FC<LoginFormProps> = ({
     name: "",
   });
 
-  const setTokenAndCloseModal = (token: string) => {
-    login(token);
-    setTimeout(() => onComplete(), 1000);
+  const setTokenAndCloseModal = async (token: string) => {
+    if (await login(token)) {
+      setFormState({ ...formState, status: "success" });
+      setTimeout(() => onComplete(), 1000);
+      return;
+    }
+
+    setFormState({...formState, status: "idle"});
+    setErrors({ authError: "All set! But please sign in manually" });
+    setTimeout(() => onFormChangeRequest("login"), 2000);
   };
 
   const [gqlRegister] = useMutation<
@@ -61,7 +68,6 @@ const RegisterForm: React.FC<LoginFormProps> = ({
       password: formState.password,
     },
     onCompleted: ({ register }) => {
-      setFormState({ ...formState, status: "success" });
       setTimeout(() => {
         if (!register?.token) return;
         setTokenAndCloseModal(register.token);

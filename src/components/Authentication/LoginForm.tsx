@@ -43,9 +43,15 @@ const LoginForm: React.FC<LoginFormProps> = ({
     password: "",
   });
 
-  const setTokenAndCloseModal = (token: string) => {
-    login(token);
-    setTimeout(() => onComplete(), 1000);
+  const setTokenAndCloseModal = async (token: string) => {
+    if (await login(token)) {
+      setFormState({ ...formState, status: "success" });
+      setTimeout(() => onComplete(), 1000);
+      return;
+    }
+
+    setErrors({ authError: "Failed to log in! Please try again" });
+    setFormState({ ...formState, status: "idle" });
   };
 
   const [gqlLogin] = useMutation<LoginMutation, LoginMutationVariables>(
@@ -56,7 +62,6 @@ const LoginForm: React.FC<LoginFormProps> = ({
         password: formState.password,
       },
       onCompleted: ({ login }) => {
-        setFormState({ ...formState, status: "success" });
         setTimeout(() => {
           if (!login?.token) return;
           setTokenAndCloseModal(login.token);
@@ -96,7 +101,7 @@ const LoginForm: React.FC<LoginFormProps> = ({
   };
 
   const handleSubmit = () => {
-    if (isSubmitBtnDisabled ||errors.emailError || errors.passwordError) {
+    if (isSubmitBtnDisabled || errors.emailError || errors.passwordError) {
       return;
     }
 

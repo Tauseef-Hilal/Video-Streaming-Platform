@@ -8,7 +8,7 @@ import { verifyTokenAndGetPayload } from "@/lib/utils/auth";
 interface AuthContextType {
   isLoggedIn: boolean;
   userId: string;
-  login: (token: string) => void;
+  login: (token: string) => Promise<boolean>;
   logout: () => void;
 }
 
@@ -21,19 +21,30 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [userId, setUserId] = useState("");
 
   useEffect(() => {
-    const token = localStorage.getItem(AUTH_TOKEN_KEY);
-    if (token) {
-      const { userId } = verifyTokenAndGetPayload(token) as JwtPayload;
-      setUserId(userId);
-      setIsLoggedIn(true);
-    }
+    const verify = async () => {
+      const token = localStorage.getItem(AUTH_TOKEN_KEY) || "";
+      const payload = await verifyTokenAndGetPayload(token);
+
+      if (payload) {
+        setUserId(payload.userId);
+        setIsLoggedIn(true);
+      }
+    };
+
+    verify();
   }, []);
 
-  const login = (token: string) => {
+  const login = async (token: string) => {
     localStorage.setItem(AUTH_TOKEN_KEY, token);
-    const { userId } = verifyTokenAndGetPayload(token) as JwtPayload;
-    setUserId(userId);
-    setIsLoggedIn(true);
+    const payload = await verifyTokenAndGetPayload(token);
+
+    if (payload) {
+      setUserId(payload.userId);
+      setIsLoggedIn(true);
+      return true;
+    }
+
+    return false;
   };
 
   const logout = () => {

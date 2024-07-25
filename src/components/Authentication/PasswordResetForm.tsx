@@ -17,7 +17,7 @@ import { BiCheckCircle } from "react-icons/bi";
 
 interface PasswordResetFormProps {
   onComplete: () => void;
-  onFormChangeRequest: (form: "register") => void;
+  onFormChangeRequest: (form: "register" | "login") => void;
 }
 
 interface FormError {
@@ -50,9 +50,18 @@ const PasswordResetForm: React.FC<PasswordResetFormProps> = ({
     password: "",
   });
 
-  const setTokenAndCloseModal = (token: string) => {
-    login(token);
-    setTimeout(() => onComplete(), 1000);
+  const setTokenAndCloseModal = async (token: string) => {
+    if (await login(token)) {
+      setFormState({ ...formState, status: "success" });
+      setTimeout(() => onComplete(), 1000);
+      return;
+    }
+
+    setErrors({
+      authError: "Password changed! But login failed",
+    });
+    setFormState({ ...formState, status: "idle" });
+    setTimeout(() => onFormChangeRequest("login"), 2000);
   };
 
   const [resetPassword] = useMutation<
@@ -64,7 +73,6 @@ const PasswordResetForm: React.FC<PasswordResetFormProps> = ({
       password: formState.password,
     },
     onCompleted: ({ passwordReset }) => {
-      setFormState({ ...formState, status: "success" });
       setTimeout(() => {
         if (!passwordReset?.token) return;
         setTokenAndCloseModal(passwordReset.token);

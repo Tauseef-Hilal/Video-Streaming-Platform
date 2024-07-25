@@ -1,9 +1,10 @@
 "use server";
 
-import jwt from "jsonwebtoken";
+import jwt, { JwtPayload } from "jsonwebtoken";
 import sgMail from "@sendgrid/mail";
 import { compare, hash } from "bcrypt-ts";
 import { JWT_SECRET } from "../constants";
+import { promisify } from "util";
 
 export const hashPassword = async (password: string) => {
   return await hash(password, 10);
@@ -20,8 +21,23 @@ export const generateToken = (userId: string) => {
   return jwt.sign({ userId }, JWT_SECRET, { expiresIn: "1d" });
 };
 
-export const verifyTokenAndGetPayload = (token: string) => {
-  return jwt.verify(token, JWT_SECRET);
+const verifyAsync = (token: string, secret: string) =>
+  new Promise<JwtPayload>((resolve, reject) => {
+    jwt.verify(token, secret, (err, decoded) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(decoded as JwtPayload);
+      }
+    });
+  });
+
+export const verifyTokenAndGetPayload = async (token: string) => {
+  try {
+    return await verifyAsync(token, JWT_SECRET);
+  } catch (error) {
+    return null;
+  }
 };
 
 export type SendOtpResponse = {
